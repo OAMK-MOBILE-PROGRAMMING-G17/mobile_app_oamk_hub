@@ -13,3 +13,35 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk location)
+local.properties
+
+# Android Studio project files
+.idea/
+*.iml
+
+# Log files
+*.log
+
+# User-specific files
+*.swp
+
+# Keystore files (never commit your keystore to version control)
+*.jks
+*.keystore
+
+# Generated files
+*.apk
+*.ap_
+*.dex
+*.class
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
