@@ -1,4 +1,4 @@
-package com.example.oamkhub.ui.theme
+package com.example.oamkhub.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
