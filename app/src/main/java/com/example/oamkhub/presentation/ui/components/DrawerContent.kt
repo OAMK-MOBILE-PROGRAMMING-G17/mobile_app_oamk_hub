@@ -3,6 +3,7 @@ package com.example.oamkhub.presentation.ui.components
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,13 +34,25 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
         )
 
         NavigationDrawerItem(
-            label = { Text("Lost & Found") },
+            label = { Text("News") },
             selected = false,
-            icon = { Icon(Icons.Default.Search, contentDescription = null) },
+            icon = { Icon(Icons.AutoMirrored.Filled.Article, contentDescription = "News icon") },
             onClick = {
                 scope.launch {
                     drawerState.close()
-                    navController.navigate("lostandfound")
+                    navController.navigate("news")
+                }
+            }
+        )
+
+        NavigationDrawerItem(
+            label = { Text("Events") },
+            selected = false,
+            icon = { Icon(Icons.Default.Event, contentDescription = "Events icon") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    navController.navigate("events")
                 }
             }
         )
