@@ -17,12 +17,36 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.oamkhub.R
 import com.example.oamkhub.presentation.ui.theme.PrimaryOrange
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.oamkhub.viewmodel.AuthViewModel
 
 @Composable
 fun SignupScreen(navController: NavController) {
+    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+
+    var passwordError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+
+    val viewModel: AuthViewModel = viewModel()
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogMessage by remember { mutableStateOf("")}
+    val registerResult by viewModel.registerResult.collectAsState()
+
+    LaunchedEffect(registerResult) {
+        registerResult?.let {
+            showDialog = true
+            dialogMessage = it
+            if (!it.contains("already")) {
+                name = ""
+                email = ""
+                password = ""
+                confirmPassword = ""
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -60,52 +84,75 @@ fun SignupScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(24.dp))
 
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email Address") },
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Full Name") },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFFFF3E0),
-                focusedContainerColor = Color(0xFFFFF3E0)
-            )
+            shape = RoundedCornerShape(12.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
+            value = email,
+            onValueChange = {
+                email = it
+                emailError = if(!android.util.Patterns.EMAIL_ADDRESS.matcher(it).matches()){
+                    "Invalid email address"
+                } else null
+                            },
+            isError = emailError != null,
+            label = { Text("Email Address") },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            supportingText = {
+                if (emailError != null) Text(emailError ?: "", color = MaterialTheme.colorScheme.error)
+            }
+        )
+
+        Spacer(modifier = Modifier.height(0.dp))
+
+        OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = {
+                password = it
+                passwordError = if (it != confirmPassword) "Passwords do not match" else null
+            },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFFFF3E0),
-                focusedContainerColor = Color(0xFFFFF3E0)
-            )
+            shape = RoundedCornerShape(12.dp)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = confirmPassword,
-            onValueChange = { confirmPassword = it },
+            onValueChange = {
+                confirmPassword = it
+                passwordError = if (password != it) "Passwords do not match" else null
+            },
             label = { Text("Confirm Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFFFF3E0),
-                focusedContainerColor = Color(0xFFFFF3E0)
-            )
+            supportingText = {
+                if (passwordError != null) Text(passwordError ?: "", color = MaterialTheme.colorScheme.error)
+            }
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                // TODO for later use: Add Firebase signup logic
+                if (name.isNotBlank()
+                    && email.isNotBlank()
+                    && password.isNotBlank()
+                    && confirmPassword.isNotBlank()
+                    && password == confirmPassword
+                    && emailError == null){
+                    viewModel.register(name, email, password)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,4 +173,28 @@ fun SignupScreen(navController: NavController) {
             }
         )
     }
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "Signup Info") },
+            text = { (Text(dialogMessage)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                        navController.navigate("login"){
+                            popUpTo("signup") { inclusive = true }
+                        }
+                    }
+                ) {
+                    Text("Go to Login")
+                }
+            }
+        )
+    }
 }
+
+//@Composable
+//fun AuthViewModel() {
+//    TODO("Not yet implemented")
+//}

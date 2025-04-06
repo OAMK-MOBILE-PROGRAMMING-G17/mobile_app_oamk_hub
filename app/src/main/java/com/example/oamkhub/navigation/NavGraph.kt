@@ -16,7 +16,7 @@ import com.example.oamkhub.presentation.ui.screen.signup.SignupScreen
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("front") {
             FrontScreen(navController)
         }
