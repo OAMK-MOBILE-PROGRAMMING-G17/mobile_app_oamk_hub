@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -35,11 +36,15 @@ fun SignupScreen(navController: NavController) {
     var dialogMessage by remember { mutableStateOf("")}
     val registerResult by viewModel.registerResult.collectAsState()
 
+    var registrationSuccessful by remember { mutableStateOf(false) }
+
     LaunchedEffect(registerResult) {
         registerResult?.let {
             showDialog = true
             dialogMessage = it
-            if (!it.contains("already")) {
+            registrationSuccessful = !it.contains("already", ignoreCase = true)
+
+            if (registrationSuccessful) {
                 name = ""
                 email = ""
                 password = ""
@@ -60,7 +65,9 @@ fun SignupScreen(navController: NavController) {
         Image(
             painter = painterResource(id = R.drawable.oamk_logo),
             contentDescription = "OAMK Logo",
-            modifier = Modifier.height(100.dp)
+            modifier = Modifier
+                .height(200.dp)
+                .width(200.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -77,6 +84,7 @@ fun SignupScreen(navController: NavController) {
         Text(
             text = "Create account so you can explore\nall the exciting features of App.",
             fontSize = 16.sp,
+            textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
             lineHeight = 22.sp
         )
@@ -153,6 +161,10 @@ fun SignupScreen(navController: NavController) {
                     && emailError == null){
                     viewModel.register(name, email, password)
                 }
+                else {
+                    dialogMessage = "Please fill in all fields"
+                    showDialog = true
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -176,25 +188,39 @@ fun SignupScreen(navController: NavController) {
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            title = { Text(text = "Signup Info") },
-            text = { (Text(dialogMessage)) },
+            title = {
+                Text(
+                    text = "Signup Info",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                    },
+            text = {
+                Text(
+                    text = dialogMessage,
+                    fontSize = 16.sp
+                )
+            },
             confirmButton = {
-                TextButton(
+                Button(
                     onClick = {
                         showDialog = false
-                        navController.navigate("login"){
-                            popUpTo("signup") { inclusive = true }
+                        if (registrationSuccessful) {
+                            navController.navigate("login") {
+                                popUpTo("signup") { inclusive = true }
+                            }
                         }
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryOrange),
+                    shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Go to Login")
+                    Text(
+                        text = if (registrationSuccessful) "Go to Login" else "OK",
+                        fontSize = 16.sp
+                    )
                 }
             }
         )
     }
-}
 
-//@Composable
-//fun AuthViewModel() {
-//    TODO("Not yet implemented")
-//}
+}

@@ -28,6 +28,8 @@ fun LoginScreen(navController: NavController) {
     val viewModel: AuthViewModel = viewModel()
     val loginSuccess by viewModel.loginSuccess.collectAsState()
 
+    var emailError by remember { mutableStateOf<String?>(null) }
+
     val loginResult by viewModel.loginResult.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
@@ -52,7 +54,8 @@ fun LoginScreen(navController: NavController) {
             painter = painterResource(id = R.drawable.oamk_logo),
             contentDescription = "OAMK Logo",
             modifier = Modifier
-                .height(100.dp)
+                .height(200.dp)
+                .width(200.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -76,13 +79,22 @@ fun LoginScreen(navController: NavController) {
 
         OutlinedTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = {
+                email = it
+                emailError = if(!android.util.Patterns.EMAIL_ADDRESS.matcher(it).matches()){
+                    "Invalid email address"
+                } else null
+            },
+            isError = emailError != null,
             label = { Text("Email Address") },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            supportingText = {
+                if (emailError != null) Text(emailError ?: "", color = MaterialTheme.colorScheme.error)
+            }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(0.dp))
 
         OutlinedTextField(
             value = password,
@@ -113,7 +125,7 @@ fun LoginScreen(navController: NavController) {
 
         Button(
             onClick = {
-                if (email.isNotBlank() && password.isNotBlank()) {
+                if (email.isNotBlank() && password.isNotBlank() && emailError == null ) {
                     viewModel.login(email, password)
                 } else {
                     dialogMessage = "Please fill in all fields"
@@ -132,19 +144,39 @@ fun LoginScreen(navController: NavController) {
 
         if (showDialog) {
             AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Login Info") },
+                onDismissRequest = {
+                    showDialog = false
+                    if (loginSuccess) {
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                    viewModel.resetLoginResult()
+                },
+                title = { Text(
+                    text = "Login Info",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                ) },
                 text = { Text(dialogMessage) },
                 confirmButton = {
-                    TextButton(onClick = {
-                        showDialog = false
-                        if (loginSuccess) {
-                            navController.navigate("home") {
-                                popUpTo("login") { inclusive = true }
+                    TextButton(
+                        onClick = {
+                            showDialog = false
+                            viewModel.resetLoginResult()
+                            if (loginSuccess) {
+                                navController.navigate("home") {
+                                    popUpTo("login") { inclusive = true }
+                                }
                             }
-                        }
-                    }) {
-                        Text("OK")
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = PrimaryOrange),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = "OK",
+                            fontSize = 16.sp
+                        )
                     }
                 }
             )

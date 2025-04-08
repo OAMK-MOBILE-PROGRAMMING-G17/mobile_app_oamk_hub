@@ -5,8 +5,3 @@ data class LoginResponse(
     val token: String?,
     val user: UserData
 )
-
-data class UserData(
-    val name: String,
-    val email: String
-)

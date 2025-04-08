@@ -65,7 +65,7 @@ class AuthViewModel : ViewModel() {
                     _loginResult.value = "Welcome, ${user?.name}!"
                     _loginSuccess.value = true
                 } else {
-                    _loginResult.value = "Login failed: ${response.errorBody()?.string()}"
+                    _loginResult.value = "Login failed: Invalid Credentials"
                     _loginSuccess.value = false
                 }
 
@@ -73,5 +73,9 @@ class AuthViewModel : ViewModel() {
                 _loginResult.value = "Network error: ${e.message}"
             }
         }
+    }
+
+    fun resetLoginResult() {
+        _loginResult.value = null
     }
 }
