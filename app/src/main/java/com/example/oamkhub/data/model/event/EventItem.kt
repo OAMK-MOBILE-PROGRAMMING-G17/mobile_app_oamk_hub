@@ -1,4 +1,4 @@
-package com.example.oamkhub.data.model
+package com.example.oamkhub.data.model.event
 
 import java.time.LocalDate
 

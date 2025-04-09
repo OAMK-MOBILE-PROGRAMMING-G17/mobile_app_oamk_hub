@@ -1,4 +1,4 @@
-package com.example.oamkhub.data.model
+package com.example.oamkhub.data.model.news
 
 data class NewsItem(
     val title: String,

@@ -2,7 +2,7 @@ package com.example.oamkhub.data.repository
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.oamkhub.data.model.EventItem
+import com.example.oamkhub.data.model.event.EventItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient

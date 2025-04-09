@@ -1,4 +1,4 @@
-package com.example.oamkhub.data.model
+package com.example.oamkhub.data.model.lostandfound
 
 data class FoundComment(
     val id: String,

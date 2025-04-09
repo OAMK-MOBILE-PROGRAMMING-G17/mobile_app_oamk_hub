@@ -1,7 +1,7 @@
 package com.example.oamkhub.data.repository
 
-import com.example.oamkhub.data.model.FoundComment
-import com.example.oamkhub.data.model.LostProduct
+import com.example.oamkhub.data.model.lostandfound.FoundComment
+import com.example.oamkhub.data.model.lostandfound.LostProduct
 import com.example.oamkhub.data.network.RetrofitInstance
 import retrofit2.Response
 

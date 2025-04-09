@@ -1,4 +1,4 @@
-package com.example.oamkhub.data.model
+package com.example.oamkhub.data.model.lostandfound
 
 import com.google.gson.annotations.SerializedName
 

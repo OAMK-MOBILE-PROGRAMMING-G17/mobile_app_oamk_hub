@@ -2,7 +2,7 @@ package com.example.oamkhub.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.oamkhub.data.model.NewsItem
+import com.example.oamkhub.data.model.news.NewsItem
 import com.example.oamkhub.data.repository.NewsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

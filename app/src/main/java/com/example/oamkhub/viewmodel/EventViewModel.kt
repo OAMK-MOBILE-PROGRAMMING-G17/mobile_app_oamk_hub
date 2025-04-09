@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.oamkhub.data.model.EventItem
+import com.example.oamkhub.data.model.event.EventItem
 import com.example.oamkhub.data.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.oamkhub.data.model.LostProduct
+import com.example.oamkhub.data.model.lostandfound.LostProduct
 
 @Composable
 fun LostFoundCard(item: LostProduct, onViewComments: () -> Unit, onAddComment: (String) -> Unit) {

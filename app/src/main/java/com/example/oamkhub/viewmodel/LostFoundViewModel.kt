@@ -3,10 +3,10 @@ package com.example.oamkhub.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.oamkhub.data.model.FoundComment
-import com.example.oamkhub.data.model.FoundCommentRequest
-import com.example.oamkhub.data.model.LostProduct
-import com.example.oamkhub.data.model.LostProductRequest
+import com.example.oamkhub.data.model.lostandfound.FoundComment
+import com.example.oamkhub.data.model.lostandfound.FoundCommentRequest
+import com.example.oamkhub.data.model.lostandfound.LostProduct
+import com.example.oamkhub.data.model.lostandfound.LostProductRequest
 import com.example.oamkhub.data.network.RetrofitInstance
 import com.example.oamkhub.data.repository.LostFoundRepository
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,13 +1,13 @@
 package com.example.oamkhub.data.network
 
-import com.example.oamkhub.data.model.FoundComment
-import com.example.oamkhub.data.model.FoundCommentRequest
-import com.example.oamkhub.data.model.LoginRequest
-import com.example.oamkhub.data.model.LoginResponse
-import com.example.oamkhub.data.model.LostProduct
-import com.example.oamkhub.data.model.LostProductRequest
-import com.example.oamkhub.data.model.RegisterRequest
-import com.example.oamkhub.data.model.RegisterResponse
+import com.example.oamkhub.data.model.lostandfound.FoundComment
+import com.example.oamkhub.data.model.lostandfound.FoundCommentRequest
+import com.example.oamkhub.data.model.login.LoginRequest
+import com.example.oamkhub.data.model.login.LoginResponse
+import com.example.oamkhub.data.model.lostandfound.LostProduct
+import com.example.oamkhub.data.model.lostandfound.LostProductRequest
+import com.example.oamkhub.data.model.register.RegisterRequest
+import com.example.oamkhub.data.model.register.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

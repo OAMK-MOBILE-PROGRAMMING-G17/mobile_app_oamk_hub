@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
-import com.example.oamkhub.data.model.EventItem
+import com.example.oamkhub.data.model.event.EventItem
 
 @Composable
 fun EventCard(item: EventItem) {

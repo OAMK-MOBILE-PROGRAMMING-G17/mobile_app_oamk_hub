@@ -1,6 +1,6 @@
 package com.example.oamkhub.data.repository
 
-import com.example.oamkhub.data.model.NewsItem
+import com.example.oamkhub.data.model.news.NewsItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient

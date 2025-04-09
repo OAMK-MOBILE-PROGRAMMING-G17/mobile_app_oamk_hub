@@ -13,7 +13,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.oamkhub.data.model.NewsItem
+import com.example.oamkhub.data.model.news.NewsItem
 
 @Composable
 fun NewsCard(item: NewsItem) {
