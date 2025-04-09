@@ -57,6 +57,18 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
             }
         )
 
+        NavigationDrawerItem(
+            label = { Text("Lost and Found") },
+            selected = false,
+            icon = { Icon(Icons.Default.Event, contentDescription = "Events icon") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    navController.navigate("lostfound")
+                }
+            }
+        )
+
         // For later use...
     }
 }

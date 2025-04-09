@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -33,6 +34,8 @@ fun LoginScreen(navController: NavController) {
     val loginResult by viewModel.loginResult.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var dialogMessage by remember { mutableStateOf("") }
+
+    val context = LocalContext.current
 
     LaunchedEffect(loginResult) {
         loginResult?.let {
@@ -126,7 +129,7 @@ fun LoginScreen(navController: NavController) {
         Button(
             onClick = {
                 if (email.isNotBlank() && password.isNotBlank() && emailError == null ) {
-                    viewModel.login(email, password)
+                    viewModel.login(email, password, context)
                 } else {
                     dialogMessage = "Please fill in all fields"
                     showDialog = true

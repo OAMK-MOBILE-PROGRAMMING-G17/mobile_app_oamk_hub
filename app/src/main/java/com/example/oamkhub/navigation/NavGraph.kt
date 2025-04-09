@@ -10,13 +10,14 @@ import com.example.oamkhub.presentation.ui.screen.events.EventsScreen
 import com.example.oamkhub.presentation.ui.screen.front.FrontScreen
 import com.example.oamkhub.presentation.ui.screen.home.HomeScreen
 import com.example.oamkhub.presentation.ui.screen.login.LoginScreen
+import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundScreen
 import com.example.oamkhub.presentation.ui.screen.news.NewsScreen
 import com.example.oamkhub.presentation.ui.screen.signup.SignupScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = "lostfound") {
         composable("front") {
             FrontScreen(navController)
         }
@@ -34,6 +35,10 @@ fun AppNavGraph(navController: NavHostController) {
         }
         composable("events"){
             EventsScreen(navController)
+        }
+
+        composable("lostfound"){
+            LostFoundScreen(navController)
         }
     }
 }

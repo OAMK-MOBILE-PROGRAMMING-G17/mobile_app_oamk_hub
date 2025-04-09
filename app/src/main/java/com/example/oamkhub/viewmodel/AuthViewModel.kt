@@ -1,11 +1,13 @@
 package com.example.oamkhub.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oamkhub.data.model.LoginRequest
 import com.example.oamkhub.data.model.RegisterRequest
 import com.example.oamkhub.data.network.RetrofitInstance
+import com.example.oamkhub.data.utils.UserPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -55,15 +57,19 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun login(email: String, password: String) {
+    fun login(email: String, password: String, context: Context) {
         viewModelScope.launch {
             try {
                 val response = RetrofitInstance.api.loginUser(LoginRequest(email, password))
 
                 if (response.isSuccessful) {
                     val user = response.body()?.user
+                    val token = response.body()?.token
                     _loginResult.value = "Welcome, ${user?.name}!"
                     _loginSuccess.value = true
+                    token?.let {
+                        UserPreferences(context).saveToken(it)
+                    }
                 } else {
                     _loginResult.value = "Login failed: Invalid Credentials"
                     _loginSuccess.value = false
