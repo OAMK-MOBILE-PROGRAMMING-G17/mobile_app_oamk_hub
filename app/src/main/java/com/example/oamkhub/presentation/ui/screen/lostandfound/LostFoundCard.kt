@@ -10,11 +10,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.oamkhub.data.model.lostandfound.LostProduct
 
 @Composable
-fun LostFoundCard(item: LostProduct, onViewComments: () -> Unit, onAddComment: (String) -> Unit) {
-    Card(modifier = Modifier.padding(8.dp).fillMaxWidth()) {
+fun LostFoundCard(
+    navController: NavController,
+    item: LostProduct,
+    onAddComment: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+    ) {
 
         Column(Modifier.padding(16.dp)) {
             Text(text = item.title, fontWeight = FontWeight.Bold)
@@ -23,7 +32,9 @@ fun LostFoundCard(item: LostProduct, onViewComments: () -> Unit, onAddComment: (
             Text(text = "Lost At: ${item.lostTime}")
 
             Button(
-                onClick = onViewComments,
+                onClick = {
+                    navController.navigate("lostfoundcomments/${item.id}/${item.title}")
+                },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
                 Text("View Comments")

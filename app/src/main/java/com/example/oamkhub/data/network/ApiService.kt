@@ -25,7 +25,7 @@ interface ApiService {
     @GET("/lost-products")
     suspend fun getAllLostProducts(@Header("Authorization") token: String): Response<List<LostProduct>>
 
-    @GET("found/{lostProductId}")
+    @GET("found-products/{lostProductId}")
     suspend fun getFoundComments(
         @Path("lostProductId") lostProductId: String,
         @Header("Authorization") token: String

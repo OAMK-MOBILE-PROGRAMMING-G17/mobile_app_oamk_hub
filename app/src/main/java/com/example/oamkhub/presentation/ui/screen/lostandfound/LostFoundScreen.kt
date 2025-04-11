@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import com.example.oamkhub.viewmodel.LostFoundViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,32 +26,10 @@ import com.example.oamkhub.data.utils.UserPreferences
 import com.example.oamkhub.presentation.ui.components.BaseLayout
 
 @Composable
-fun LostProductForm(viewModel: LostFoundViewModel, token: String) {
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var lostTime by remember { mutableStateOf("") }
-
-    Column(Modifier.padding(16.dp)) {
-        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Title") })
-        OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") })
-        OutlinedTextField(value = location, onValueChange = { location = it }, label = { Text("Location") })
-        OutlinedTextField(value = lostTime, onValueChange = { lostTime = it }, label = { Text("Lost Time") })
-
-        Button(onClick = {
-            viewModel.submitLostProduct(title, description, location, lostTime, token)
-        }) {
-            Text("Submit Lost Item")
-        }
-    }
-}
-
-@Composable
 fun LostFoundScreen(navController: NavController) {
     val context = LocalContext.current
     val viewModel: LostFoundViewModel = viewModel()
     val lostItems by viewModel.lostProducts.collectAsState()
-
     var token by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
@@ -70,18 +48,21 @@ fun LostFoundScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            LostProductForm(viewModel = viewModel, token = token)
+            Button(
+                onClick = { navController.navigate("lostfoundform") },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Lost something?")
+            }
 
             LazyColumn {
                 items(lostItems) { item ->
                     if (item.id != null) {
                         LostFoundCard(
+                            navController = navController,
                             item = item,
-                            onViewComments = {
-                                viewModel.fetchCommentsForLostItem(item.id!!, token)
-                            },
                             onAddComment = { comment ->
-                                viewModel.addComment(item.id!!, comment, token)
+                                viewModel.addComment(item.id, comment, token)
                             }
                         )
                     } else {

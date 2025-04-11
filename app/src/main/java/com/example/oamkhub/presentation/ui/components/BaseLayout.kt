@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.navigation.NavController
 
+
 @Composable
 fun BaseLayout(
     navController: NavController,
@@ -36,7 +37,7 @@ private fun BaseScaffold(
 ) {
     Scaffold(
         topBar = {
-            HubTopBar(title = title, drawerState = drawerState)
+            HubTopBar(title = title, drawerState = drawerState, navController = navController)
         },
         content = content
     )

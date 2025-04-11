@@ -39,10 +39,15 @@ class LostFoundViewModel : ViewModel() {
         viewModelScope.launch {
             val response = repository.getFoundComments(id, token)
             if (response.isSuccessful) {
-                _selectedComments.value = response.body() ?: emptyList()
+                val comments = response.body() ?: emptyList()
+                Log.d("COMMENTS_API", "Fetched ${comments.size} comments: $comments")
+                _selectedComments.value = comments
+            } else {
+                Log.e("COMMENTS_API", "Failed to fetch comments: ${response.errorBody()?.string()}")
             }
         }
     }
+
 
     fun submitLostProduct(title: String, desc: String, location: String, time: String, token: String) {
         viewModelScope.launch {
