@@ -36,7 +36,6 @@ import com.example.oamkhub.presentation.ui.screen.signup.SignupScreen
 import com.example.oamkhub.viewmodel.LostFoundViewModel
 import com.example.oamkhub.viewmodel.MarketplaceViewModel
 import java.net.URLDecoder
-import java.net.URLEncoder
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -114,7 +113,6 @@ fun AppNavGraph(navController: NavHostController) {
             val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
             val marketplaceItems by viewModel.marketplaceItems.collectAsState()
 
-            // ⏳ If items list is empty, fetch it using token
             LaunchedEffect(key1 = marketplaceItems.isEmpty()) {
                 if (marketplaceItems.isEmpty()) {
                     val token = UserPreferences(context).getToken()
@@ -124,13 +122,11 @@ fun AppNavGraph(navController: NavHostController) {
                 }
             }
 
-            // 🔍 Now try to find the item
             val item = marketplaceItems.find { it.id == itemId }
 
             if (item != null) {
                 MarketplaceItemDetailScreen(navController = navController, item = item)
             } else {
-                // Optional: Show a loading indicator while it's being fetched
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }

@@ -44,8 +44,6 @@ class MarketplaceViewModel : ViewModel() {
 
 
     // Create a new marketplace item
-    // MarketplaceViewModel.kt
-
     fun createMarketplaceItem(
         context: Context,
         token: String,

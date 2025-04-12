@@ -19,7 +19,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun FullScreenImageView(
@@ -27,10 +27,10 @@ fun FullScreenImageView(
     images: List<String>,
     initialImageUrl: String
 ) {
-    var currentIndex by remember { mutableStateOf(images.indexOf(initialImageUrl).coerceAtLeast(0)) }
-    var scale by remember { mutableStateOf(1f) }
-    var offsetX by remember { mutableStateOf(0f) }
-    var offsetY by remember { mutableStateOf(0f) }
+    var currentIndex by remember { mutableIntStateOf(images.indexOf(initialImageUrl).coerceAtLeast(0)) }
+    var scale by remember { mutableFloatStateOf(1f) }
+    var offsetX by remember { mutableFloatStateOf(0f) }
+    var offsetY by remember { mutableFloatStateOf(0f) }
 
     val state = rememberTransformableState { zoomChange, panChange, _ ->
         scale = (scale * zoomChange).coerceIn(1f, 5f)
@@ -76,7 +76,7 @@ fun FullScreenImageView(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = rememberImagePainter(currentImageUrl),
+            painter = rememberAsyncImagePainter(currentImageUrl),
             contentDescription = "Full screen image",
             contentScale = ContentScale.Fit,
             modifier = Modifier

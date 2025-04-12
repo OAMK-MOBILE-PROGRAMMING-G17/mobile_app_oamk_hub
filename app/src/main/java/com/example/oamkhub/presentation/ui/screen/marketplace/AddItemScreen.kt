@@ -28,7 +28,7 @@ fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel)
     var endDate by remember { mutableStateOf("") }
     var images by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var isUploading by remember { mutableStateOf(false) }
-    var uploadProgress by remember { mutableStateOf(0f) }
+    var uploadProgress by remember { mutableFloatStateOf(0f) }
 
     val getImages = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris: List<Uri> ->
         images = images + uris

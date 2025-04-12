@@ -2,7 +2,6 @@ package com.example.oamkhub.data.repository
 
 import android.util.Log
 import com.example.oamkhub.data.model.marketplace.MarketplaceItem
-import com.example.oamkhub.data.network.ApiService
 import com.example.oamkhub.data.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

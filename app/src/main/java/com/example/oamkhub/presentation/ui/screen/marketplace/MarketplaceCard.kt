@@ -6,9 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.*
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.oamkhub.data.model.marketplace.MarketplaceItem
 
 @Composable
@@ -27,9 +26,8 @@ fun MarketplaceCard(
             Text(text = item.description, style = MaterialTheme.typography.bodyLarge)
             Text(text = "Price: ${item.price}", style = MaterialTheme.typography.bodyLarge)
 
-            // Assuming images are URL paths, handle images accordingly.
             item.images.forEach { image ->
-                Image(painter = rememberImagePainter(image), contentDescription = "Item image")
+                Image(painter = rememberAsyncImagePainter(image), contentDescription = "Item image")
             }
         }
     }

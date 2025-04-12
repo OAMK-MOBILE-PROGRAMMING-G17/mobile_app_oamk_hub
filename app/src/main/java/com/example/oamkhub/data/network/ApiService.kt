@@ -9,7 +9,6 @@ import com.example.oamkhub.data.model.lostandfound.LostProductRequest
 import com.example.oamkhub.data.model.register.RegisterRequest
 import com.example.oamkhub.data.model.register.RegisterResponse
 import com.example.oamkhub.data.model.marketplace.MarketplaceItem
-import com.example.oamkhub.data.model.marketplace.MarketplaceItemRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

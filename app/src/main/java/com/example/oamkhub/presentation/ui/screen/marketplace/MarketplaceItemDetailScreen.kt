@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
 import androidx.compose.material3.MaterialTheme
 import androidx.navigation.NavController
 import com.example.oamkhub.data.model.marketplace.MarketplaceItem
@@ -16,6 +15,7 @@ import com.example.oamkhub.data.network.RetrofitInstance
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import coil.compose.rememberAsyncImagePainter
 import com.example.oamkhub.presentation.ui.components.BaseLayout
 import java.net.URLEncoder
 
@@ -51,7 +51,7 @@ fun MarketplaceItemDetailScreen(
                     items(images) { imagePath ->
                         val fullImageUrl = "${RetrofitInstance.BASE_URL}/$imagePath".replace("\\", "/")
                         Image(
-                            painter = rememberImagePainter(fullImageUrl),
+                            painter = rememberAsyncImagePainter(fullImageUrl),
                             contentDescription = "Marketplace item image",
                             modifier = Modifier
                                 .aspectRatio(1f)
