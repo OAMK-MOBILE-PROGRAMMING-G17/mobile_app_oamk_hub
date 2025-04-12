@@ -69,6 +69,18 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
             }
         )
 
+        NavigationDrawerItem(
+            label = { Text("MarketPlace") },
+            selected = false,
+            icon = { Icon(Icons.Default.Sell, contentDescription = "Search icon") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    navController.navigate("marketplace")
+                }
+            }
+        )
+
         // For later use...
     }
 }

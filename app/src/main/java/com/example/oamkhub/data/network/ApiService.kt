@@ -8,20 +8,31 @@ import com.example.oamkhub.data.model.lostandfound.LostProduct
 import com.example.oamkhub.data.model.lostandfound.LostProductRequest
 import com.example.oamkhub.data.model.register.RegisterRequest
 import com.example.oamkhub.data.model.register.RegisterResponse
+import com.example.oamkhub.data.model.marketplace.MarketplaceItem
+import com.example.oamkhub.data.model.marketplace.MarketplaceItemRequest
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface ApiService {
+
+    //user
     @POST("auth/register")
     suspend fun registerUser(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @POST("auth/login")
     suspend fun loginUser(@Body request: LoginRequest): Response<LoginResponse>
 
+    //Lost and Found
     @GET("/lost-products")
     suspend fun getAllLostProducts(@Header("Authorization") token: String): Response<List<LostProduct>>
 
@@ -43,5 +54,31 @@ interface ApiService {
         @Body comment: FoundCommentRequest
     ): Response<Any>
 
+    //Marketplace
+    @GET("marketplace")
+    suspend fun getAllMarketplaceItems(@Header("Authorization") token: String): Response<List<MarketplaceItem>>
 
+    @Multipart
+    @POST("marketplace")
+    suspend fun createMarketplaceItem(
+        @Header("Authorization") token: String,
+        @Part ("title") title: RequestBody,
+        @Part ("description") description: RequestBody,
+        @Part ("price") price: RequestBody,
+        @Part ("end_date") endDate: RequestBody,
+        @Part images: List<MultipartBody.Part> // Array of image files
+    ): Response<MarketplaceItem>
+
+    @PUT("marketplace/{id}")
+    suspend fun updateMarketplaceItem(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Body item: MarketplaceItem
+    ): Response<MarketplaceItem>
+
+    @DELETE("marketplace/{id}")
+    suspend fun deleteMarketplaceItem(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Response<Void>
 }

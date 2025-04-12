@@ -2,7 +2,12 @@ package com.example.oamkhub.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -10,6 +15,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.example.oamkhub.data.utils.UserPreferences
 import com.example.oamkhub.presentation.ui.screen.events.EventsScreen
 import com.example.oamkhub.presentation.ui.screen.front.FrontScreen
 import com.example.oamkhub.presentation.ui.screen.home.HomeScreen
@@ -17,9 +27,16 @@ import com.example.oamkhub.presentation.ui.screen.login.LoginScreen
 import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundCommentsScreen
 import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundFormScreen
 import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundScreen
+import com.example.oamkhub.presentation.ui.screen.marketplace.AddItemScreen
+import com.example.oamkhub.presentation.ui.screen.marketplace.FullScreenImageView
+import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceItemDetailScreen
+import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceScreen
 import com.example.oamkhub.presentation.ui.screen.news.NewsScreen
 import com.example.oamkhub.presentation.ui.screen.signup.SignupScreen
 import com.example.oamkhub.viewmodel.LostFoundViewModel
+import com.example.oamkhub.viewmodel.MarketplaceViewModel
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -29,7 +46,7 @@ fun AppNavGraph(navController: NavHostController) {
         com.example.oamkhub.data.utils.UserPreferences(context).getToken()
     }
 
-    val startDestination = if (!token.isNullOrEmpty()) "home" else "login"
+    val startDestination = if (!token.isNullOrEmpty()) "marketplace" else "login"
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable("front") {
@@ -41,17 +58,17 @@ fun AppNavGraph(navController: NavHostController) {
         composable("signup") {
             SignupScreen(navController)
         }
-        composable("home"){
+        composable("home") {
             HomeScreen(navController)
         }
-        composable("news"){
+        composable("news") {
             NewsScreen(navController)
         }
-        composable("events"){
+        composable("events") {
             EventsScreen(navController)
         }
 
-        composable("lostfound"){
+        composable("lostfound") {
             LostFoundScreen(navController)
         }
 
@@ -77,6 +94,66 @@ fun AppNavGraph(navController: NavHostController) {
                 title = title
             )
         }
+
+        composable("marketplace") {
+            val viewModel: MarketplaceViewModel = viewModel()
+            MarketplaceScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable("addItem") {
+            val viewModel: MarketplaceViewModel = viewModel()
+            AddItemScreen(navController = navController, viewModel = viewModel)
+        }
+
+        composable(
+            route = "marketplaceDetail/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val context = LocalContext.current
+            val viewModel: MarketplaceViewModel = viewModel()
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
+            val marketplaceItems by viewModel.marketplaceItems.collectAsState()
+
+            // ⏳ If items list is empty, fetch it using token
+            LaunchedEffect(key1 = marketplaceItems.isEmpty()) {
+                if (marketplaceItems.isEmpty()) {
+                    val token = UserPreferences(context).getToken()
+                    if (!token.isNullOrEmpty()) {
+                        viewModel.fetchMarketplaceItems(token)
+                    }
+                }
+            }
+
+            // 🔍 Now try to find the item
+            val item = marketplaceItems.find { it.id == itemId }
+
+            if (item != null) {
+                MarketplaceItemDetailScreen(navController = navController, item = item)
+            } else {
+                // Optional: Show a loading indicator while it's being fetched
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+
+        composable(
+            route = "fullscreen_image/{initialImageUrl}/{encodedImages}",
+            arguments = listOf(
+                navArgument("initialImageUrl") { type = NavType.StringType },
+                navArgument("encodedImages") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val initialImageUrl = URLDecoder.decode(backStackEntry.arguments?.getString("initialImageUrl") ?: "", "UTF-8")
+            val encodedImages = backStackEntry.arguments?.getString("encodedImages") ?: ""
+            val images = encodedImages.split("||").map { URLDecoder.decode(it, "UTF-8") }
+
+            FullScreenImageView(navController, images, initialImageUrl)
+        }
+
+
+
+
 
     }
 }
