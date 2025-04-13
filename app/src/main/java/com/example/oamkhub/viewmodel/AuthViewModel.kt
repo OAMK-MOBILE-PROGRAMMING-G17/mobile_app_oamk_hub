@@ -8,9 +8,11 @@ import com.example.oamkhub.data.model.login.LoginRequest
 import com.example.oamkhub.data.model.register.RegisterRequest
 import com.example.oamkhub.data.network.RetrofitInstance
 import com.example.oamkhub.data.utils.UserPreferences
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AuthViewModel : ViewModel() {
     private val _registerResult = MutableStateFlow<String?>(null)
@@ -65,16 +67,28 @@ class AuthViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val user = response.body()?.user
                     val token = response.body()?.token
+
                     _loginResult.value = "Welcome, ${user?.name}!"
                     _loginSuccess.value = true
-                    token?.let {
-                        UserPreferences(context).saveToken(it)
+
+                    if (token != null) {
+                        withContext(Dispatchers.IO) {
+                            UserPreferences(context).saveToken(token)
+                        }
+                    }
+
+                    val userId = user?.id?.toString()
+                    if (userId != null) {
+                        withContext(Dispatchers.IO) {
+                            UserPreferences(context).saveUserId(userId)
+                        }
+                        Log.d("LOGIN_CHECK", "User ID from response: ${user?.id}")
+
                     }
                 } else {
                     _loginResult.value = "Login failed: Invalid Credentials"
                     _loginSuccess.value = false
                 }
-
             } catch (e: Exception) {
                 _loginResult.value = "Network error: ${e.message}"
             }

@@ -15,7 +15,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import com.example.oamkhub.data.utils.uriToFile
+import com.example.oamkhub.presentation.utils.uriToFile
 
 class MarketplaceViewModel : ViewModel() {
 
@@ -55,7 +55,6 @@ class MarketplaceViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
 
-            // Convert other fields to RequestBody
             val titleRequestBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
             val descriptionRequestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
             val priceRequestBody = price.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -73,6 +72,22 @@ class MarketplaceViewModel : ViewModel() {
 
             if (item != null) {
                 fetchMarketplaceItems(token)
+            }
+        }
+    }
+
+    fun deleteMarketplaceItem(itemId: String, token: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.deleteMarketplaceItem("Bearer $token", itemId)
+                if (response.isSuccessful) {
+                    Log.d("DELETE", "Success: Item deleted")
+                    onSuccess()
+                } else {
+                    Log.e("DELETE", "Error: ${response.code()} - ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("DELETE", "Exception during delete: ${e.localizedMessage}")
             }
         }
     }

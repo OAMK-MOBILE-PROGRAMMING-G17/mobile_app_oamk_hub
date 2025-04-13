@@ -123,9 +123,10 @@ fun AppNavGraph(navController: NavHostController) {
             }
 
             val item = marketplaceItems.find { it.id == itemId }
+            val token = UserPreferences(LocalContext.current).getToken() ?: ""
 
             if (item != null) {
-                MarketplaceItemDetailScreen(navController = navController, item = item)
+                MarketplaceItemDetailScreen(navController = navController, item = item, token=token)
             } else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()

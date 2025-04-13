@@ -11,6 +11,7 @@ import com.example.oamkhub.data.model.register.RegisterResponse
 import com.example.oamkhub.data.model.marketplace.MarketplaceItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -55,7 +56,9 @@ interface ApiService {
 
     //Marketplace
     @GET("marketplace")
-    suspend fun getAllMarketplaceItems(@Header("Authorization") token: String): Response<List<MarketplaceItem>>
+    suspend fun getAllMarketplaceItems(
+        @Header("Authorization"
+        ) token: String): Response<List<MarketplaceItem>>
 
     @Multipart
     @POST("marketplace")
@@ -79,5 +82,5 @@ interface ApiService {
     suspend fun deleteMarketplaceItem(
         @Header("Authorization") token: String,
         @Path("id") id: String
-    ): Response<Void>
+    ): Response<ResponseBody>
 }

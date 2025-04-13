@@ -44,7 +44,7 @@ fun HubTopBar(title: String, drawerState: DrawerState?, navController: NavContro
         actions = {
             IconButton(onClick = {
                 scope.launch {
-                    UserPreferences(context).clearToken()
+                    UserPreferences(context).clearAll()
                     navController.navigate("front") {
                         popUpTo(0) { inclusive = true }
                     }

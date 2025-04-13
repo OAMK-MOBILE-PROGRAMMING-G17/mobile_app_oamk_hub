@@ -11,6 +11,7 @@ fun BaseLayout(
     navController: NavController,
     title: String,
     showDrawer: Boolean = true,
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -21,7 +22,7 @@ fun BaseLayout(
             drawerContent = { DrawerContent(navController, drawerState) },
             drawerState = drawerState
         ) {
-            BaseScaffold(navController, drawerState, title, content)
+            BaseScaffold(navController, drawerState, title, content, bottomBar)
         }
     } else {
         BaseScaffold(navController, drawerState = null, title, content)
@@ -33,12 +34,14 @@ private fun BaseScaffold(
     navController: NavController,
     drawerState: DrawerState?,
     title: String,
-    content: @Composable (PaddingValues) -> Unit
+    content: @Composable (PaddingValues) -> Unit,
+    bottomBar: @Composable () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
             HubTopBar(title = title, drawerState = drawerState, navController = navController)
         },
-        content = content
+        content = content,
+        bottomBar = { bottomBar() }
     )
 }
