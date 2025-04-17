@@ -120,6 +120,7 @@ fun LoginScreen(navController: NavController) {
                 fontSize = 13.sp,
                 modifier = Modifier.clickable {
                     // TODO for later user
+                    navController.navigate("resetEmail")
                 }
             )
         }
