@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.oamkhub.data.utils.UserPreferences
+import com.example.oamkhub.presentation.ui.screen.contacts.ContactScreen
 import com.example.oamkhub.presentation.ui.screen.events.EventsScreen
 import com.example.oamkhub.presentation.ui.screen.front.FrontScreen
 import com.example.oamkhub.presentation.ui.screen.home.HomeScreen
@@ -161,6 +162,11 @@ fun AppNavGraph(navController: NavHostController) {
             val images = encodedImages.split("||").map { URLDecoder.decode(it, "UTF-8") }
 
             FullScreenImageView(navController, images, initialImageUrl)
+        }
+
+
+        composable("contact") {
+            ContactScreen()
         }
 
 
