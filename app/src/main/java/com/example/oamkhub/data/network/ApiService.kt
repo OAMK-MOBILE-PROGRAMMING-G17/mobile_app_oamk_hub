@@ -32,6 +32,15 @@ interface ApiService {
     @POST("auth/login")
     suspend fun loginUser(@Body request: LoginRequest): Response<LoginResponse>
 
+    @POST("auth/reset-password/request-otp")
+    suspend fun requestOtp(@Body email: Map<String, String>): Response<Map<String, String>>
+
+    @POST("auth/reset-password/verify-otp")
+    suspend fun verifyOtp(@Body request: Map<String, String>): Response<Map<String, String>>
+
+    @POST("auth/reset-password")
+    suspend fun resetPassword(@Body request: Map<String, String>): Response<Map<String, String>>
+
     //Lost and Found
     @GET("/lost-products")
     suspend fun getAllLostProducts(@Header("Authorization") token: String): Response<List<LostProduct>>

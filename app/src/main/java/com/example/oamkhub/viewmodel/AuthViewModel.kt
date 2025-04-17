@@ -24,6 +24,15 @@ class AuthViewModel : ViewModel() {
     private val _loginSuccess = MutableStateFlow(false)
     val loginSuccess: StateFlow<Boolean> = _loginSuccess
 
+    private val _otpRequestResult = MutableStateFlow<String?>(null)
+    val otpRequestResult: StateFlow<String?> = _otpRequestResult
+
+    private val _otpVerificationResult = MutableStateFlow<Boolean?>(null)
+    val otpVerificationResult: StateFlow<Boolean?> = _otpVerificationResult
+
+    private val _resetPasswordResult = MutableStateFlow<String?>(null)
+    val resetPasswordResult: StateFlow<String?> = _resetPasswordResult
+
     fun register(name: String, email: String, password: String) {
         viewModelScope.launch {
             try {
@@ -93,6 +102,57 @@ class AuthViewModel : ViewModel() {
                 _loginResult.value = "Network error: ${e.message}"
             }
         }
+    }
+
+    fun requestOtp(email: String) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.requestOtp(mapOf("email" to email))
+                if (response.isSuccessful) {
+                    _otpRequestResult.value = response.body()?.get("message")
+                } else {
+                    _otpRequestResult.value = "Failed to send OTP"
+                }
+            } catch (e: Exception) {
+                _otpRequestResult.value = "Error: ${e.message}"
+            }
+        }
+    }
+
+    fun verifyOtp(email: String, otp: String) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.verifyOtp(mapOf("email" to email, "otp" to otp))
+                _otpVerificationResult.value = response.isSuccessful
+            } catch (e: Exception) {
+                _otpVerificationResult.value = false
+            }
+        }
+    }
+
+    fun resetPassword(email: String, otp: String, newPassword: String) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.resetPassword(
+                    mapOf("email" to email, "otp" to otp, "newPassword" to newPassword)
+                )
+                if (response.isSuccessful) {
+                    _resetPasswordResult.value = response.body()?.get("message") ?: "Password reset successfully"
+                } else {
+                    _resetPasswordResult.value = "Password reset is failed"
+                }
+            } catch (e: Exception) {
+                _resetPasswordResult.value = "Error: ${e.message}"
+            }
+        }
+    }
+
+    fun setResetPasswordResult(message: String) {
+        _resetPasswordResult.value = message
+    }
+
+    fun resetOtpVerificationResult() {
+        _otpVerificationResult.value = null
     }
 
     fun resetLoginResult() {

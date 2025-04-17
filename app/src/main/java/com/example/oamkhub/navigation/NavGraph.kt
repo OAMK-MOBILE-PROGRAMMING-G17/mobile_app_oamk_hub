@@ -32,6 +32,9 @@ import com.example.oamkhub.presentation.ui.screen.marketplace.FullScreenImageVie
 import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceItemDetailScreen
 import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceScreen
 import com.example.oamkhub.presentation.ui.screen.news.NewsScreen
+import com.example.oamkhub.presentation.ui.screen.reset.ChangePasswordScreen
+import com.example.oamkhub.presentation.ui.screen.reset.OtpScreen
+import com.example.oamkhub.presentation.ui.screen.reset.ResetEmailScreen
 import com.example.oamkhub.presentation.ui.screen.signup.SignupScreen
 import com.example.oamkhub.viewmodel.LostFoundViewModel
 import com.example.oamkhub.viewmodel.MarketplaceViewModel
@@ -57,6 +60,18 @@ fun AppNavGraph(navController: NavHostController) {
         composable("signup") {
             SignupScreen(navController)
         }
+
+        composable("resetEmail") { ResetEmailScreen(navController) }
+        composable("otpScreen/{email}") { backStackEntry ->
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            OtpScreen(navController, email)
+        }
+        composable("changePassword/{email}/{otp}") { backStackEntry ->
+            val email = backStackEntry.arguments?.getString("email") ?: ""
+            val otp = backStackEntry.arguments?.getString("otp") ?: ""
+            ChangePasswordScreen(navController, email, otp)
+        }
+
         composable("home") {
             HomeScreen(navController)
         }
