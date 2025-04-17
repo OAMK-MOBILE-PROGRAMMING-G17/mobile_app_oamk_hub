@@ -2,6 +2,7 @@ package com.example.oamkhub.presentation.ui.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.*
@@ -79,6 +80,13 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
                     navController.navigate("marketplace")
                 }
             }
+        )
+
+        NavigationDrawerItem(
+            label = { Text("Contact") },
+            selected = false,
+            onClick = { navController.navigate("contact") },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
         )
 
         // For later use...
