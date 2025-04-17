@@ -1,7 +1,6 @@
 package com.example.oamkhub.presentation.ui.screen.contacts
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -14,28 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.example.oamkhub.presentation.ui.components.BaseLayout
+import androidx.core.net.toUri
 
 @Composable
-fun ContactScreen() {
+fun ContactScreen(navController: androidx.navigation.NavController) {
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
-    ) {
-        // Header
-        Text(
-            text = "Emergency Contacts",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        // Contacts List
+    BaseLayout(
+        navController = navController,
+        title = "Emergency Contacts"
+    ) { padding ->
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.padding(padding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
@@ -45,7 +35,7 @@ fun ContactScreen() {
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable {
-                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+1234567890"))
+                        val intent = Intent(Intent.ACTION_DIAL, "tel:+1234567890".toUri())
                         context.startActivity(intent)
                     }
             ) {
@@ -65,7 +55,7 @@ fun ContactScreen() {
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable {
-                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+0987654321"))
+                        val intent = Intent(Intent.ACTION_DIAL, "tel:+0987654321".toUri())
                         context.startActivity(intent)
                     }
             ) {
@@ -87,7 +77,7 @@ fun ContactScreen() {
                     .padding(vertical = 8.dp)
                     .clickable {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = Uri.parse("mailto:support@example.com")
+                            data = "mailto:support@example.com".toUri()
                         }
                         context.startActivity(intent)
                     }
@@ -109,7 +99,7 @@ fun ContactScreen() {
                     .padding(vertical = 8.dp)
                     .clickable {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = Uri.parse("mailto:admin@example.com")
+                            data = "mailto:admin@example.com".toUri()
                         }
                         context.startActivity(intent)
                     }
