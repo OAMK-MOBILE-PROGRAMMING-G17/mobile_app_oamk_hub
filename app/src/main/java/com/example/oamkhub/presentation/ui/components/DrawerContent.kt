@@ -85,8 +85,13 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
         NavigationDrawerItem(
             label = { Text("Contact") },
             selected = false,
-            onClick = { navController.navigate("contact") },
-            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            icon = { Icon(Icons.Default.ContactPhone, contentDescription = "Contact Icon") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    navController.navigate("contact")
+                }
+            }
         )
 
         // For later use...
