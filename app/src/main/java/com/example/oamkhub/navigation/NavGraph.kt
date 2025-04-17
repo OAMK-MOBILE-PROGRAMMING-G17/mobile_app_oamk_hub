@@ -164,9 +164,8 @@ fun AppNavGraph(navController: NavHostController) {
             FullScreenImageView(navController, images, initialImageUrl)
         }
 
-
         composable("contact") {
-            ContactScreen()
+            ContactScreen(navController)
         }
 
 
