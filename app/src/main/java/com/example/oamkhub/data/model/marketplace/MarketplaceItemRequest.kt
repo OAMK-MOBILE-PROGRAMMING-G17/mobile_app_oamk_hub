@@ -5,5 +5,5 @@ data class MarketplaceItemRequest(
     val description: String,
     val price: String,
     val endDate: String,
-    val images: List<String> // List of file paths of the uploaded images
+    val images: List<String>
 )

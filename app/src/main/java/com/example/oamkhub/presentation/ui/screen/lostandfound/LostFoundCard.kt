@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.oamkhub.data.model.lostandfound.LostProduct
+import com.example.oamkhub.presentation.utils.getRelativeTimeSpan
 
 @Composable
 fun LostFoundCard(
@@ -19,6 +20,9 @@ fun LostFoundCard(
     item: LostProduct,
     onAddComment: (String) -> Unit
 ) {
+
+    val relativeTimeText = getRelativeTimeSpan(item.createdAt)
+
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -26,6 +30,11 @@ fun LostFoundCard(
     ) {
 
         Column(Modifier.padding(16.dp)) {
+            Text(
+                text = relativeTimeText,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
             Text(text = item.title, fontWeight = FontWeight.Bold)
             Text(text = item.description)
             Text(text = "Location: ${item.location}")

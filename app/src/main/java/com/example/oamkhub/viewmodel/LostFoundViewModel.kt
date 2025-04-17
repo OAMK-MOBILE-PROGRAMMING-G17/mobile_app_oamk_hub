@@ -1,17 +1,23 @@
 package com.example.oamkhub.viewmodel
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oamkhub.data.model.lostandfound.FoundComment
 import com.example.oamkhub.data.model.lostandfound.FoundCommentRequest
 import com.example.oamkhub.data.model.lostandfound.LostProduct
-import com.example.oamkhub.data.model.lostandfound.LostProductRequest
 import com.example.oamkhub.data.network.RetrofitInstance
 import com.example.oamkhub.data.repository.LostFoundRepository
+import com.example.oamkhub.presentation.utils.uriToFile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class LostFoundViewModel : ViewModel() {
     private val repository = LostFoundRepository()
@@ -49,12 +55,50 @@ class LostFoundViewModel : ViewModel() {
     }
 
 
-    fun submitLostProduct(title: String, desc: String, location: String, time: String, token: String) {
+    fun submitLostProduct(
+        title: String,
+        desc: String,
+        location: String,
+        time: String,
+        token: String,
+        imageUris: List<Uri>? = null,
+        context: Context
+    ) {
         viewModelScope.launch {
-            val lost = LostProductRequest(title, desc, location, time)
-            val response = RetrofitInstance.api.createLostProduct("Bearer $token", lost)
-            if (response.isSuccessful) {
-                fetchLostItems(token)
+            try {
+                val titlePart = title.toRequestBody("text/plain".toMediaTypeOrNull())
+                val descPart = desc.toRequestBody("text/plain".toMediaTypeOrNull())
+                val locationPart = location.toRequestBody("text/plain".toMediaTypeOrNull())
+                val timePart = time.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val imageParts = imageUris?.mapNotNull { uri ->
+                    try {
+                        val file = uriToFile(context, uri)
+                        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                        MultipartBody.Part.createFormData("images", file.name, requestFile)
+                    } catch (e: Exception) {
+                        Log.e("LOST_FOUND", "Failed to convert uri: $uri", e)
+                        null
+                    }
+                } ?: emptyList()
+
+                val response = RetrofitInstance.api.createLostProductMultipart(
+                    "Bearer $token",
+                    titlePart,
+                    descPart,
+                    locationPart,
+                    timePart,
+                    imageParts
+                )
+
+                if (response.isSuccessful) {
+                    Log.d("LOST_FOUND", "Lost item submitted successfully")
+                    fetchLostItems(token)
+                } else {
+                    Log.e("LOST_FOUND", "Submission failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("LOST_FOUND", "Exception during submission: ${e.message}")
             }
         }
     }

@@ -42,11 +42,16 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Response<List<FoundComment>>
 
+    @Multipart
     @POST("lost-products")
-    suspend fun createLostProduct(
+    suspend fun createLostProductMultipart(
         @Header("Authorization") token: String,
-        @Body request: LostProductRequest
-    ): Response<Any>
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("location") location: RequestBody,
+        @Part("lost_time") lostTime: RequestBody,
+        @Part images: List<MultipartBody.Part>
+    ): Response<LostProduct>
 
     @POST("found-products")
     suspend fun createFoundComment(

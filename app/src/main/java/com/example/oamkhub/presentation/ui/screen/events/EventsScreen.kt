@@ -15,10 +15,8 @@ import com.example.oamkhub.presentation.ui.components.BaseLayout
 import com.example.oamkhub.viewmodel.EventViewModel
 import java.time.Month
 import androidx.compose.material3.*
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -32,10 +30,16 @@ fun EventsScreen(navController: androidx.navigation.NavController) {
         viewModel.loadEvents()
     }
 
-    BaseLayout(navController = navController, title = "Events") { padding ->
+    BaseLayout(
+        navController = navController,
+        title = "Events",
+        isRefreshing = false,
+        onRefresh = {
+            viewModel.loadEvents()
+        }
+    ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
 
-            // 🔽 FILTER DROPDOWN — Always visible
             val selectedMonth by viewModel.selectedMonth.collectAsState()
             var expanded by remember { mutableStateOf(false) }
             val months = Month.entries.toTypedArray()
@@ -80,7 +84,6 @@ fun EventsScreen(navController: androidx.navigation.NavController) {
                 }
             }
 
-            // 🔽 Loading or No Results
             when {
                 isLoading -> {
                     Box(

@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Reorder
 import androidx.compose.material.icons.filled.Sell
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -22,22 +20,20 @@ import com.example.oamkhub.data.utils.UserPreferences
 import com.example.oamkhub.presentation.ui.components.BaseLayout
 import com.example.oamkhub.viewmodel.MarketplaceViewModel
 
+
 @Composable
 fun MarketplaceScreen(navController: NavController, viewModel: MarketplaceViewModel) {
     val marketplaceItems by viewModel.marketplaceItems.collectAsState(initial = emptyList())
     val context = LocalContext.current
+    val token = UserPreferences(context).getToken()
+    var showOnlyMyListings by remember { mutableStateOf(false) }
+    val userIdState = remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(key1 = marketplaceItems.size) {
-        val token = UserPreferences(context).getToken()
+    LaunchedEffect(Unit) {
+        userIdState.value = UserPreferences(context).getUserId()
         if (!token.isNullOrEmpty()) {
             viewModel.fetchMarketplaceItems(token)
         }
-    }
-
-    var showOnlyMyListings by remember { mutableStateOf(false) }
-    val userIdState = remember { mutableStateOf<String?>(null) }
-    LaunchedEffect(Unit) {
-        userIdState.value = UserPreferences(context).getUserId()
     }
 
     val displayedItems = if (showOnlyMyListings && userIdState.value != null) {
@@ -50,6 +46,12 @@ fun MarketplaceScreen(navController: NavController, viewModel: MarketplaceViewMo
         navController = navController,
         title = "Marketplace",
         showDrawer = true,
+        isRefreshing = false,
+        onRefresh = {
+            if (!token.isNullOrEmpty()) {
+                viewModel.fetchMarketplaceItems(token)
+            }
+        },
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(

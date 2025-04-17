@@ -13,7 +13,6 @@ import androidx.navigation.NavController
 import com.example.oamkhub.viewmodel.LostFoundViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +41,18 @@ fun LostFoundScreen(navController: NavController) {
         }
     }
 
-    BaseLayout(navController = navController, title = "Lost & Found") { padding ->
+    val displayedItems = lostItems.reversed()
+
+    BaseLayout(
+        navController = navController,
+        title = "Lost & Found",
+        isRefreshing = false,
+        onRefresh = {
+            if (token.isNotEmpty()) {
+                viewModel.fetchLostItems(token)
+            }
+        },
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -56,21 +66,18 @@ fun LostFoundScreen(navController: NavController) {
             }
 
             LazyColumn {
-                items(lostItems) { item ->
-                    if (item.id != null) {
+                items(displayedItems) { item ->
+                    item.id?.let {
                         LostFoundCard(
                             navController = navController,
                             item = item,
                             onAddComment = { comment ->
-                                viewModel.addComment(item.id, comment, token)
+                                viewModel.addComment(it, comment, token)
                             }
                         )
-                    } else {
-                        Log.e("LOST_FOUND", "Lost item has null ID: $item")
-                    }
+                    } ?: Log.e("LOST_FOUND", "Lost item has null ID: $item")
                 }
             }
-
         }
     }
 }
