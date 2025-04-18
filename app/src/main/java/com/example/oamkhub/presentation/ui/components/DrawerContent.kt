@@ -33,6 +33,17 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
                 }
             }
         )
+        NavigationDrawerItem(
+            label = { Text("Main") },
+            selected = false,
+            icon = { Icon(Icons.Default.Home, contentDescription = "Main Icon") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    navController.navigate("main")
+                }
+            }
+        )
 
         NavigationDrawerItem(
             label = { Text("News") },

@@ -168,8 +168,8 @@ fun AppNavGraph(navController: NavHostController) {
         composable("contact") {
             ContactScreen()
         }
-
-
+        composable("about") {
+        }
 
 
 
