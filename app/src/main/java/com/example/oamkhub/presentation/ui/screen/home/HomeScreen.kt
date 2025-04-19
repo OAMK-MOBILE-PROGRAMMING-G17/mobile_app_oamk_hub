@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.oamkhub.presentation.ui.components.BaseLayout
+ import com.example.oamkhub.presentation.ui.components.BaseLayout
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -83,6 +83,11 @@ fun HomeScreen(navController: NavController) {
                     icon = Icons.Default.Help,
                     label = "Lost & Found",
                     onClick = { navController.navigate("lostfound") }
+                )
+                QuickActionCard(
+                    icon = Icons.Default.Info, // Replace with a suitable icon for "News"
+                    label = "News",
+                    onClick = { navController.navigate("news") }
                 )
             }
         }
