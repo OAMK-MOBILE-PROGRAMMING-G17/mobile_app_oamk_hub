@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.oamkhub.data.utils.UserPreferences
+import com.example.oamkhub.presentation.ui.screen.about.AboutScreen
 import com.example.oamkhub.presentation.ui.screen.contacts.ContactScreen
 import com.example.oamkhub.presentation.ui.screen.events.EventsScreen
 import com.example.oamkhub.presentation.ui.screen.front.FrontScreen
@@ -169,6 +170,10 @@ fun AppNavGraph(navController: NavHostController) {
             ContactScreen()
         }
         composable("about") {
+            AboutScreen(navController)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
         }
 
 

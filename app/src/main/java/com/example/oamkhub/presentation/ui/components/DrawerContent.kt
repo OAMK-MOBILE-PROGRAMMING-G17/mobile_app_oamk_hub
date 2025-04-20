@@ -104,7 +104,17 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
                 }
             }
         )
-
+        NavigationDrawerItem(
+            label = { Text("About") },
+            selected = false,
+            icon = { Icon(Icons.Default.Info, contentDescription = "About") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                navController.navigate("about")
+                }
+            }
+        )
         // For later use...
     }
 }
