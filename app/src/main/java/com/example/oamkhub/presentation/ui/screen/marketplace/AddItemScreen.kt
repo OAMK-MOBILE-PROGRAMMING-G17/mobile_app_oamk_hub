@@ -3,7 +3,6 @@ package com.example.oamkhub.presentation.ui.screen.marketplace
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -14,10 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import android.app.DatePickerDialog
-import androidx.compose.foundation.border
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.ui.graphics.StrokeCap
 import com.example.oamkhub.data.utils.UserPreferences
 import com.example.oamkhub.presentation.ui.components.BaseLayout
 import com.example.oamkhub.viewmodel.MarketplaceViewModel
@@ -25,83 +21,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.*
-
-@Composable
-fun ClickableDateField(
-    label: String,
-    dateText: String,
-    onDatePicked: (String) -> Unit,
-    placeholder: String = "Tap to pick end date"
-) {
-    val context = LocalContext.current
-    var showDialog by remember { mutableStateOf(false) }
-
-    if (showDialog) {
-        val calendar = Calendar.getInstance()
-        val datePicker = DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                val c = Calendar.getInstance()
-                c.set(Calendar.YEAR, year)
-                c.set(Calendar.MONTH, month)
-                c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                val format = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-                onDatePicked(format.format(c.time))
-                showDialog = false
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePicker.setOnCancelListener { showDialog = false }
-        datePicker.show()
-    }
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-                .padding(bottom = 4.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 56.dp)
-                .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
-                .clickable { showDialog = true }
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            if (dateText.isEmpty()) {
-                Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            } else {
-                Text(dateText, color = MaterialTheme.colorScheme.onSurface)
-            }
-        }
-    }
-}
-
-fun filterToFloat(input: String): String {
-    var dotCount = 0
-    return input.filter { char ->
-        if (char == '.') {
-            if (dotCount == 0) {
-                dotCount++
-                true
-            } else {
-                false
-            }
-        } else {
-            char.isDigit()
-        }
-    }
-}
-
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
+import androidx.activity.result.launch
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import java.io.File
+import android.graphics.Bitmap
+import android.app.DatePickerDialog
+import java.util.Calendar
+import android.content.Intent
+import android.location.LocationManager
+import android.provider.Settings
+import android.content.Context
 
 @Composable
 fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel) {
@@ -114,34 +49,87 @@ fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel)
     var images by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var isUploading by remember { mutableStateOf(false) }
     var uploadProgress by remember { mutableFloatStateOf(0f) }
+    var endDate by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
+    var gpsLocation by remember { mutableStateOf<Pair<Double, Double>?>(null) }
 
-    // Pick images
+    val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+
+    val calendar = Calendar.getInstance()
+
+    // DatePickerDialog to select the end date
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            endDate = "$dayOfMonth/${month + 1}/$year"
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+
+
+    // Permission launcher
+    val requestPermissionsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val fineLocationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+        val coarseLocationGranted = permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+
+        if (fineLocationGranted || coarseLocationGranted) {
+            fetchCurrentLocation(context, fusedLocationClient) { location ->
+                gpsLocation = location
+            }
+        } else {
+            android.util.Log.d("AddItemScreen", "Location permissions denied")
+        }
+    }
+
+    fun checkAndRequestPermissions() {
+        val locationManager = context.getSystemService(LocationManager::class.java)
+        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request location permissions
+            requestPermissionsLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        } else if (!isGpsEnabled) {
+            // Prompt user to enable GPS
+            context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+        } else {
+            // Fetch current location
+            fetchCurrentLocation(context, fusedLocationClient) { location ->
+                gpsLocation = location
+            }
+        }
+    }
+
+
     val getImages =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris: List<Uri> ->
             images = images + uris
         }
-    var endDate by remember { mutableStateOf("") }
 
-
-    // Pick date
-    var showDatePicker by remember { mutableStateOf(false) }
-    if (showDatePicker) {
-        DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                val c = Calendar.getInstance()
-                c.set(Calendar.YEAR, year)
-                c.set(Calendar.MONTH, month)
-                c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-                endDate = dateFormat.format(c.time)
-
-                showDatePicker = false
-            },
-            2025, 0, 1
-        ).show()
-    }
+    val captureImageFromCamera =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            bitmap?.let {
+                // Convert Bitmap to a temporary file
+                val tempFile = File.createTempFile("captured_image", ".jpg", context.cacheDir).apply {
+                    outputStream().use { stream ->
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                    }
+                }
+                // Get URI for the temporary file
+                val uri = Uri.fromFile(tempFile)
+                images = images + uri // Add URI to the list of images
+            }
+        }
 
     BaseLayout(navController = navController, title = "Add Marketplace Items") { padding ->
         Column(
@@ -164,29 +152,51 @@ fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel)
 
             OutlinedTextField(
                 value = price,
-                onValueChange = { newValue ->
-
-                    price = filterToFloat(newValue)
-                },
+                onValueChange = { newValue -> price = filterToFloat(newValue) },
                 label = { Text("Price") },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
                 leadingIcon = { Text("€") }
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
 
-            var endDate by remember { mutableStateOf("") }
+            // Button to open DatePickerDialog
+            Button(onClick = { datePickerDialog.show() }) {
+                Text(if (endDate.isEmpty()) "Select End Date" else "End Date: $endDate")
+            }
 
-            ClickableDateField(
-                label = "End Date",
-                dateText = endDate,
-                onDatePicked = { newDate -> endDate = newDate },
-                placeholder = "Tap to pick end date"
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = address,
+                onValueChange = { address = it },
+                label = { Text("Address") }
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = { checkAndRequestPermissions() }) {
+                Text("Get Current Location")
+            }
+
+            gpsLocation?.let {
+                Text(
+                    text = "Latitude: ${it.first}, Longitude: ${it.second}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(onClick = { getImages.launch(arrayOf("image/*")) }) {
-                Text("Pick Images")
+                Text("Pick Images from Gallery")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = { captureImageFromCamera.launch() }) {
+                Text("Capture Image from Camera")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -207,11 +217,8 @@ fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel)
 
             if (isUploading) {
                 LinearProgressIndicator(
-                progress = { uploadProgress },
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                strokeCap = StrokeCap.Round,
+                    progress = uploadProgress,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
@@ -237,6 +244,8 @@ fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel)
                                 description = description,
                                 price = price,
                                 endDate = endDate,
+                                address = address,
+                                gpsLocation = gpsLocation,
                                 images = images
                             )
 
@@ -256,11 +265,52 @@ fun AddItemScreen(navController: NavController, viewModel: MarketplaceViewModel)
                             description.isNotEmpty() &&
                             price.isNotEmpty() &&
                             endDate.isNotEmpty() &&
+                            address.isNotEmpty() &&
+                            gpsLocation != null &&
                             images.isNotEmpty()
                 ) {
                     Text("Create Item")
                 }
             }
         }
+    }
+}
+
+fun filterToFloat(input: String): String {
+    var dotCount = 0
+    return input.filter { char ->
+        if (char == '.') {
+            if (dotCount == 0) {
+                dotCount++
+                true
+            } else {
+                false
+            }
+        } else {
+            char.isDigit()
+        }
+    }
+}
+
+
+fun fetchCurrentLocation(
+    context: Context,
+    fusedLocationClient: FusedLocationProviderClient,
+    onLocationFetched: (Pair<Double, Double>?) -> Unit
+) {
+    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+        ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    ) {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                onLocationFetched(Pair(location.latitude, location.longitude))
+            } else {
+                onLocationFetched(null)
+            }
+        }.addOnFailureListener {
+            onLocationFetched(null)
+        }
+    } else {
+        onLocationFetched(null)
     }
 }
