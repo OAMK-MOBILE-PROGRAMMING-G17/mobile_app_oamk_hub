@@ -82,6 +82,8 @@ interface ApiService {
         @Part ("description") description: RequestBody,
         @Part ("price") price: RequestBody,
         @Part ("end_date") endDate: RequestBody,
+        @Part("address") address: RequestBody,
+        @Part("gps_location") gpsLocation: RequestBody,
         @Part images: List<MultipartBody.Part> // Array of image files
     ): Response<MarketplaceItem>
 
