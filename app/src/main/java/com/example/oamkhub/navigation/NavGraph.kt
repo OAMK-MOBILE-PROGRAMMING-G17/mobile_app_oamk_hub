@@ -34,6 +34,7 @@ import com.example.oamkhub.presentation.ui.screen.marketplace.FullScreenImageVie
 import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceItemDetailScreen
 import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceScreen
 import com.example.oamkhub.presentation.ui.screen.news.NewsScreen
+import com.example.oamkhub.presentation.ui.screen.profile.ProfileScreen
 import com.example.oamkhub.presentation.ui.screen.reset.ChangePasswordScreen
 import com.example.oamkhub.presentation.ui.screen.reset.OtpScreen
 import com.example.oamkhub.presentation.ui.screen.reset.ResetEmailScreen
@@ -174,6 +175,9 @@ fun AppNavGraph(navController: NavHostController) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
+        }
+        composable("profile") {
+            ProfileScreen(navController = navController)
         }
 
 

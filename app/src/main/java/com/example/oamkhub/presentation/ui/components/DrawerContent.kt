@@ -115,6 +115,17 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
                 }
             }
         )
-        // For later use...
+        NavigationDrawerItem(
+            label = { Text("Profile") },
+            selected = false,
+            icon = { Icon(Icons.Default.Person, contentDescription = "Profile Icon") },
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    navController.navigate("profile")
+                }
+            }
+        )
+       // For later use...
     }
 }
