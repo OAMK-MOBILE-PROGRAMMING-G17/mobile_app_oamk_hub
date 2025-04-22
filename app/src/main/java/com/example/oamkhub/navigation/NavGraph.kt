@@ -29,6 +29,7 @@ import com.example.oamkhub.presentation.ui.screen.login.LoginScreen
 import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundCommentsScreen
 import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundFormScreen
 import com.example.oamkhub.presentation.ui.screen.lostandfound.LostFoundScreen
+import com.example.oamkhub.presentation.ui.screen.main.MainScreen
 import com.example.oamkhub.presentation.ui.screen.marketplace.AddItemScreen
 import com.example.oamkhub.presentation.ui.screen.marketplace.FullScreenImageView
 import com.example.oamkhub.presentation.ui.screen.marketplace.MarketplaceItemDetailScreen
@@ -78,6 +79,10 @@ fun AppNavGraph(navController: NavHostController) {
         composable("home") {
             HomeScreen(navController)
         }
+        composable("main") {
+            MainScreen(navController)
+        }
+
         composable("news") {
             NewsScreen(navController)
         }
@@ -173,14 +178,11 @@ fun AppNavGraph(navController: NavHostController) {
         composable("about") {
             AboutScreen(navController)
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
             }
         }
         composable("profile") {
             ProfileScreen(navController = navController)
         }
-
-
 
     }
 }
