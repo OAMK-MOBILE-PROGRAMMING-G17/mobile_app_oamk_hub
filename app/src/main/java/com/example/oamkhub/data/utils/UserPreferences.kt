@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import androidx.datastore.preferences.core.edit
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore(name = "user_prefs")
@@ -29,6 +30,15 @@ class UserPreferences(private val context: Context) {
             .map { preferences -> preferences[USER_ID] }
             .first()
     }
+
+    val tokenFlow: Flow<String>
+        get() = context.dataStore.data
+            .map { prefs -> prefs[USER_TOKEN] ?: "" }
+
+    /** Flow of userId changes — emits "" when no userId is set */
+    fun getUserIdFlow(): Flow<String> =
+        context.dataStore.data
+            .map { prefs -> prefs[USER_ID].orEmpty() }
 
     suspend fun saveToken(token: String) {
         context.dataStore.edit { preferences ->

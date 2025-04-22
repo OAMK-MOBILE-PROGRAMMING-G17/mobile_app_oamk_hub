@@ -26,6 +26,8 @@ import com.example.oamkhub.presentation.ui.components.BaseLayout
 import com.example.oamkhub.viewmodel.MarketplaceViewModel
 import java.net.URLEncoder
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -45,8 +47,6 @@ fun MarketplaceItemDetailScreen(
     }
 
     val canDelete = item.userId == currentUserIdState.value
-
-
 
     BaseLayout(navController = navController, title = item.title) { padding ->
         Column(
@@ -108,10 +108,24 @@ fun MarketplaceItemDetailScreen(
             Button(
                 onClick = {
                     navController.popBackStack()
-                    },
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text("Back to Marketplace", color = Color.White)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            val me = currentUserIdState.value.orEmpty()
+            if (me.isNotEmpty() && me != item.userId) {
+                val chatroomId = "${item.id}_$me"
+                Button(
+                    onClick = {
+                        navController.navigate("chat/$chatroomId/$token")
+                              },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Back to Marketplace", color = Color.White)
+                    Text("Chat with Seller", color = Color.White)
+                }
             }
         }
     }

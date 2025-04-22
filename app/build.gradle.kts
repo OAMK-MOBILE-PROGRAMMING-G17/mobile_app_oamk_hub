@@ -68,10 +68,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.0.0")
     implementation("androidx.compose.foundation:foundation:1.5.4")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.33.2-alpha")
-    implementation(libs.play.services.location)
-//    implementation("com.google.accompanist:accompanist-permissions:<latest>")
-//    implementation("androidx.activity:activity-compose:<latest>")
-//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:<latest>")
+    implementation("io.socket:socket.io-client:2.1.0")   // Socket.IO Java client
+    implementation("org.json:json:20231013")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -12,10 +12,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.oamkhub.data.utils.UserPreferences
+import com.example.oamkhub.presentation.ui.screen.chat.ChatListScreen
+import com.example.oamkhub.presentation.ui.screen.chat.ChatScreen
 import com.example.oamkhub.presentation.ui.screen.marketplace.*
 import com.example.oamkhub.viewmodel.MarketplaceViewModel
 import java.net.URLDecoder
@@ -72,5 +75,27 @@ fun NavGraphBuilder.marketplaceGraph(navController: NavHostController) {
 
             FullScreenImageView(navController, images, initial)
         }
+
+        composable("chat_list") {
+            ChatListScreen(navController)
+        }
+
+        composable(
+            route = "chat/{chatroomId}/{token}",
+            arguments = listOf(
+                navArgument("chatroomId") { type = NavType.StringType },
+                navArgument("token")      { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val chatroomId = backStackEntry.arguments?.getString("chatroomId") ?: ""
+            val token      = backStackEntry.arguments?.getString("token")      ?: ""
+
+            ChatScreen(
+                navController = navController,
+                chatroomId    = chatroomId,
+                token         = token
+            )
+        }
+
     }
 }
