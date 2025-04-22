@@ -51,14 +51,19 @@ class MarketplaceViewModel : ViewModel() {
         description: String,
         price: String,
         endDate: String,
-        images: List<Uri>
+        images: List<Uri>,
+        address: String,
+        gpsLocation: Pair<Double, Double>?
     ) {
         viewModelScope.launch {
-
             val titleRequestBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
             val descriptionRequestBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
             val priceRequestBody = price.toRequestBody("text/plain".toMediaTypeOrNull())
             val endDateRequestBody = endDate.toRequestBody("text/plain".toMediaTypeOrNull())
+            val addressRequestBody = address.toRequestBody("text/plain".toMediaTypeOrNull())
+            val gpsLocationRequestBody = gpsLocation?.let {
+                "${it.first},${it.second}".toRequestBody("text/plain".toMediaTypeOrNull())
+            }
 
             val imageParts = images.map { uri ->
                 val file = uriToFile(context, uri)
@@ -67,7 +72,14 @@ class MarketplaceViewModel : ViewModel() {
             }
 
             val item = marketplaceRepository.createMarketplaceItem(
-                token, titleRequestBody, descriptionRequestBody, priceRequestBody, endDateRequestBody, imageParts
+                token,
+                titleRequestBody,
+                descriptionRequestBody,
+                priceRequestBody,
+                endDateRequestBody,
+                addressRequestBody,
+                gpsLocationRequestBody,
+                imageParts
             )
 
             if (item != null) {
