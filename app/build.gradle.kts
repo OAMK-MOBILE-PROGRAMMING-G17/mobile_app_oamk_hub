@@ -59,7 +59,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-core:1.0.0")
     implementation("androidx.compose.material3:material3:1.0.0")
@@ -70,6 +69,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:0.33.2-alpha")
     implementation("io.socket:socket.io-client:2.1.0")   // Socket.IO Java client
     implementation("org.json:json:20231013")
+    implementation("androidx.core:core:1.12.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
