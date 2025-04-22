@@ -1,8 +1,10 @@
 package com.example.oamkhub.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Message
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Message
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,6 +44,15 @@ fun HubTopBar(title: String, drawerState: DrawerState?, navController: NavContro
             }
         },
         actions = {
+            IconButton(onClick = {
+                navController.navigate("chat_list")
+            }) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Message,
+                    contentDescription = "Open conversations",
+                    tint = Color.White
+                )
+            }
             IconButton(onClick = {
                 scope.launch {
                     UserPreferences(context).clearAll()
