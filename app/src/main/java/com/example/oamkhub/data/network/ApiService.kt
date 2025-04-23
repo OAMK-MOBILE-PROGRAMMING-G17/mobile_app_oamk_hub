@@ -1,5 +1,6 @@
 package com.example.oamkhub.data.network
 
+import com.example.oamkhub.data.model.PostResponse
 import com.example.oamkhub.data.model.lostandfound.FoundComment
 import com.example.oamkhub.data.model.lostandfound.FoundCommentRequest
 import com.example.oamkhub.data.model.login.LoginRequest
@@ -99,4 +100,13 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): Response<ResponseBody>
+
+    @POST("/posts")
+    suspend fun createPost(
+        @Header("Authorization") token: String,
+        @Body request: Map<String, String>
+    ): Response<Map<String, Any>>
+
+    @GET("/posts")
+    suspend fun getPosts(@Header("Authorization") token: String): Response<List<PostResponse>>
 }

@@ -1,10 +1,17 @@
 package com.example.oamkhub.presentation.ui.screen.main
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Comment
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.*
@@ -12,10 +19,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.oamkhub.data.utils.UserPreferences
 import com.example.oamkhub.presentation.ui.components.BaseLayout
 import com.example.oamkhub.viewmodel.MainViewModel
 import com.example.oamkhub.viewmodel.Post
@@ -23,6 +32,21 @@ import com.example.oamkhub.viewmodel.Post
 @Composable
 fun MainScreen(navController: NavController, viewModel: MainViewModel = viewModel()) {
     val posts by viewModel.posts.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val isPostSuccessful by viewModel.isPostSuccessful.collectAsState()
+    var postText by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val sharedPreferences = remember { context.getSharedPreferences("auth_prefs", Context.MODE_PRIVATE) }
+//    val token = sharedPreferences.getString("auth_token", null) ?: ""
+    val token = UserPreferences(context).getToken().orEmpty()
+
+    LaunchedEffect(Unit) {
+        if (token.isNotEmpty()) {
+            viewModel.fetchPosts(token)
+        } else {
+            Toast.makeText(context, "Token not found. Please log in.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     BaseLayout(
         navController = navController,
@@ -35,28 +59,85 @@ fun MainScreen(navController: NavController, viewModel: MainViewModel = viewMode
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Main Page",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(posts) { post ->
-                    PostItem(
-                        post = post,
-                        onLike = { viewModel.likePost(post.id) },
-                        onDislike = { viewModel.dislikePost(post.id) },
-                        onComment = { /* Navigate to comment screen */ }
+            // Editable text field for creating a new post
+            OutlinedTextField(
+                value = postText,
+                onValueChange = { postText = it },
+                placeholder = { Text("What's on your mind?") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(24.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                ),
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send, // Use a "Send" icon
+                        contentDescription = "Send Post",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable {
+                                if (postText.isNotBlank()) {
+                                    if (token.isNotEmpty()) {
+                                        viewModel.createPost(token, postText)
+                                        postText = "" // Clear the field after submission
+                                    } else {
+                                        Toast.makeText(context, "Token not found. Please log in.", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
                     )
                 }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else {
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(posts) { post ->
+                        PostItem(
+                            post = Post(
+                                id = post._id,
+                                author = post.user_info.name,
+                                content = post.content,
+                                likes = post.likes,
+                                dislikes = post.dislikes
+                            ),
+                            onLike = { /* Handle like */ },
+                            onDislike = { /* Handle dislike */ },
+                            onComment = { /* Handle comment */ }
+                        )
+                    }
+                }
             }
+
+
+
+//            LazyColumn(
+//                modifier = Modifier.fillMaxSize(),
+//                verticalArrangement = Arrangement.spacedBy(16.dp)
+//            ) {
+//                items(posts) { post ->
+//                    PostItem(
+//                        post = post,
+//                        onLike = { viewModel.likePost(post.id) },
+//                        onDislike = { viewModel.dislikePost(post.id) },
+//                        onComment = { /* Navigate to comment screen */ }
+//                    )
+//                }
+//            }
+
         }
     }
+
 }
 
 @Composable
