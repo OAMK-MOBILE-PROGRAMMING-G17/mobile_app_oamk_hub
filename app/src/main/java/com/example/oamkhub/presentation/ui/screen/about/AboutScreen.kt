@@ -19,9 +19,9 @@ import androidx.compose.foundation.clickable
 @Composable
 fun AboutScreen(navController: NavController) {
     val contributors = listOf(
-        "Anil Shah - Frontend Developer, Designer",
-        "Bibek Tandon - Backend Developer",
-        "Pabitra Kunwar - Project Manager"
+        "Anil Shah - Full Stack Developer",
+        "Bibek Tandon - Full Stack Developer",
+        "Pabitra Kunwar - Frontend Developer,Project Management"
     )
 
     val libraries = listOf(
