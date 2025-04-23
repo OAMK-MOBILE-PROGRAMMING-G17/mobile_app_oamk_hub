@@ -17,6 +17,7 @@ import com.example.oamkhub.presentation.ui.screen.about.AboutScreen
 import com.example.oamkhub.presentation.ui.screen.home.HomeScreen
 import com.example.oamkhub.presentation.ui.screen.main.MainScreen
 import com.example.oamkhub.presentation.ui.screen.profile.ProfileScreen
+import com.example.oamkhub.presentation.ui.screen.settings.SettingsScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -48,6 +49,11 @@ fun AppNavGraph(navController: NavHostController) {
         }
         composable("profile") {
             ProfileScreen(navController = navController)
+        }
+        composable("settings") {
+            SettingsScreen(navController = navController)
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            }
         }
     }
 
