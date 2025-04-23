@@ -34,9 +34,9 @@ fun DrawerContent(navController: NavController, drawerState: DrawerState) {
             }
         )
         NavigationDrawerItem(
-            label = { Text("Main") },
+            label = { Text("Tweets") },
             selected = false,
-            icon = { Icon(Icons.Default.Home, contentDescription = "Main Icon") },
+            icon = { Icon(Icons.Default.Create, contentDescription = "Main Icon") },
             onClick = {
                 scope.launch {
                     drawerState.close()

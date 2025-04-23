@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.oamkhub.data.model.marketplace.MarketplaceItem
+import com.example.oamkhub.data.network.RetrofitInstance
 import com.example.oamkhub.presentation.utils.getRelativeTimeSpan
 
 @Composable
@@ -24,7 +25,7 @@ fun MarketplaceCard(
 ) {
     val context = LocalContext.current
     val relativeTimeText = getRelativeTimeSpan(item.createdAt)
-    val baseUrl = "http://192.168.0.103:3003/"
+    val baseUrl = RetrofitInstance.BASE_URL+"/"
 
     Card(
         modifier = Modifier
@@ -41,6 +42,7 @@ fun MarketplaceCard(
             Text(text = item.title, style = MaterialTheme.typography.headlineSmall)
             Text(text = item.description, style = MaterialTheme.typography.bodyLarge)
             Text(text = "Price: € ${item.price}", style = MaterialTheme.typography.bodyLarge)
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Debugging: Log backend image paths
             Log.d("MarketplaceCard", "Backend image paths: ${item.images}")
@@ -89,6 +91,8 @@ fun MarketplaceCard(
                         .aspectRatio(16f / 9f) // Maintain aspect ratio
                 )
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             // "See Location" button
             Button(

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.oamkhub.data.model.PostResponse
+import com.example.oamkhub.data.model.UserInfo
 import com.example.oamkhub.data.repository.PostRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,10 +49,29 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = postRepository.createPost(token, content)
-                Log.d("MainViewModel", "Response: $response")
-                Log.d("MainViewModel", "Response Body: ${response.body()}")
-                if (response.isSuccessful && response.body()?.get("acknowledged") == true) {
-                    _isPostSuccessful.value = true
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        val newPost = PostResponse(
+                            _id = responseBody["_id"] as String,
+                            user_id = responseBody["user_id"] as String,
+                            content = responseBody["content"] as String,
+                            likes = (responseBody["likes"] as? Double)?.toInt() ?: 0,
+                            dislikes = (responseBody["dislikes"] as? Double)?.toInt() ?: 0,
+                            comments = (responseBody["comments"] as? Double)?.toInt() ?: 0,
+                            created_at = responseBody["created_at"] as String,
+                            updated_at = responseBody["updated_at"] as String,
+                            user_info = UserInfo(
+                                name = (responseBody["user_info"] as Map<*, *>)["name"] as String,
+                                email = (responseBody["user_info"] as Map<*, *>)["email"] as String
+                            )
+                        )
+                        // Add the new post to the top of the list
+                        _posts.value = listOf(newPost) + _posts.value
+                        _isPostSuccessful.value = true
+                    } else {
+                        _isPostSuccessful.value = false
+                    }
                 } else {
                     _isPostSuccessful.value = false
                 }

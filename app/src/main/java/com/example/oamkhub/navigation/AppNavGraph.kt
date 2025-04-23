@@ -24,7 +24,7 @@ fun AppNavGraph(navController: NavHostController) {
 
     val context = LocalContext.current
     val token = remember { UserPreferences(context).getToken() }
-    val startDest = if (token.isNullOrEmpty()) "auth" else "marketplace_root"
+    val startDest = if (token.isNullOrEmpty()) "auth" else "main"
 
     NavHost(
         navController = navController,

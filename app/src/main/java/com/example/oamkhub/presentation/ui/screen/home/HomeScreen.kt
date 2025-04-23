@@ -103,6 +103,13 @@ fun HomeScreen(navController: NavController) {
             ) {
                 item {
                     QuickActionCard(
+                        icon = Icons.Default.People,
+                        label = "Tweets",
+                        onClick = { navController.navigate("main") }
+                    )
+                }
+                item {
+                    QuickActionCard(
                         icon = Icons.Default.Home,
                         label = "Marketplace",
                         onClick = { navController.navigate("marketplace") }
