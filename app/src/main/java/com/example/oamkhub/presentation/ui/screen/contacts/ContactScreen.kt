@@ -35,14 +35,14 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable {
-                        val intent = Intent(Intent.ACTION_DIAL, "tel:+1234567890".toUri())
+                        val intent = Intent(Intent.ACTION_DIAL, "tel:112".toUri())
                         context.startActivity(intent)
                     }
             ) {
                 Icon(Icons.Default.Phone, contentDescription = "Phone Icon", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Police: +1234567890",
+                    text = "Emergency number: 112",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline
@@ -55,14 +55,74 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .clickable {
-                        val intent = Intent(Intent.ACTION_DIAL, "tel:+0987654321".toUri())
+                        val intent = Intent(Intent.ACTION_DIAL, "tel:029 5460211".toUri())
                         context.startActivity(intent)
                     }
             ) {
                 Icon(Icons.Default.Phone, contentDescription = "Phone Icon", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Fire Department: +0987654321",
+                    text = "Oulu Police Station: 029 5460211",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_DIAL, "tel:116117".toUri())
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = "Phone Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Medical Helpline: 116117",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_DIAL, "tel:09 2525 0116".toUri())
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = "Phone Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Crisis Helpline: 09 2525 0116",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_DIAL, "044 703 8621".toUri())
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = "Phone Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Fire Department: 044 703 8621",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline
