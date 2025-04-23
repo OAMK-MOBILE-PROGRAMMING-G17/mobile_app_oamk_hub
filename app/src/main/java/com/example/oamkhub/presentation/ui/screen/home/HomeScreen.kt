@@ -85,6 +85,7 @@ fun HomeScreen(navController: NavController) {
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
+
                 }
             }
 
@@ -136,14 +137,15 @@ fun HomeScreen(navController: NavController) {
                         onClick = { navController.navigate("news") }
                     )
                 }
-                item {
-                    Button(
-                        onClick = { navController.navigate("about") },
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text("Go to About")
-                    }
-                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { navController.navigate("about") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text("Go to About")
             }
         }
     }
