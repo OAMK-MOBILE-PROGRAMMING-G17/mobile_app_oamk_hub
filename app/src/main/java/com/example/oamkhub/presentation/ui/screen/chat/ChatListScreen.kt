@@ -49,11 +49,11 @@ fun ChatListScreen(navController: NavController) {
                     .padding(16.dp)
             ) {
                 items(threads) { thread ->
-                    val other = thread.participants.first { it != userId }
+                    val otherName = if (thread.buyer_id == userId) thread.seller_name else thread.buyer_name
 
                     ListItem(
                         headlineContent   = { Text("Item: ${thread.item_title}") },
-                        supportingContent = { Text("Chat with: $other") },
+                        supportingContent = { Text("Chat with: $otherName") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
