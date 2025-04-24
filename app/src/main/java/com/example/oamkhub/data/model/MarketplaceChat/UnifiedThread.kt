@@ -8,5 +8,7 @@ data class UnifiedThread(
     val participants: List<String>,
     val item_title: String?,
     val seen: Boolean = false,
+    val buyer_name: String,
+    val seller_name: String,
     val unread_count: Int = 0
 )
