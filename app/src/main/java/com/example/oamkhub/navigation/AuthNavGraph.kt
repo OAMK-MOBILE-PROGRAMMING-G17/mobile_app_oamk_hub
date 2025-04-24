@@ -11,7 +11,7 @@ import com.example.oamkhub.presentation.ui.screen.signup.SignupScreen
 fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
         route = "auth",
-        startDestination = Routes.Auth.Login.route
+        startDestination = Routes.Auth.Front.route
     ) {
 
         composable(Routes.Auth.Front.route)  { FrontScreen(navController) }
