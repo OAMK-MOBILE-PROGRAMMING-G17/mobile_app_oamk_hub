@@ -3,6 +3,7 @@ package com.example.oamkhub.presentation.ui.screen.chat
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -50,6 +51,15 @@ fun ChatScreen(
     val viewModel = remember { ChatViewModel(repo, savedStateHandle) }
 
     val messages by viewModel.messages.collectAsState()
+
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(messages.size - 1)
+        }
+    }
+    
     var text by rememberSaveable { mutableStateOf("") }
 
     BaseLayout(navController = navController, title = "Chat") { padding ->
@@ -91,6 +101,7 @@ fun ChatScreen(
         ) { innerPadding ->
             LazyColumn(
                 reverseLayout = false,
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
