@@ -129,6 +129,25 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                     )
                 )
             }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_DIAL, "020 611 0200".toUri())
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = "Phone Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "OAMK: 020 611 0200",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
 
             // Email
             Row(
@@ -137,7 +156,7 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                     .padding(vertical = 8.dp)
                     .clickable {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = "mailto:support@example.com".toUri()
+                            data = "mailto:study.oamk@oulu.fi.".toUri()
                         }
                         context.startActivity(intent)
                     }
@@ -145,7 +164,112 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                 Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Support: support@example.com",
+                    text = "Academic Affairs: study.oamk@oulu.fi.",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:admissions@oamk.fi".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Admission Services: admissions@oamk.fi",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:outgoing.students@oamk.fi".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Outgoing students: outgoing.students@oamk.fi",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:incoming.students@oamk.fi".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Incoming students: incoming.students@oamk.fi",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:staffmobility@oamk.fi".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Staff mobility: staffmobility@oamk.fi",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:international@oamk.fi".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "International mobility services: international@oamk.fi",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline
@@ -159,7 +283,7 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                     .padding(vertical = 8.dp)
                     .clickable {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = "mailto:admin@example.com".toUri()
+                            data = "mailto:support@oamk.fi".toUri()
                         }
                         context.startActivity(intent)
                     }
@@ -167,7 +291,29 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                 Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Admin: admin@example.com",
+                    text = "Support: support@oamk.fi",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = "mailto:admin@oamk.fi".toUri()
+                        }
+                        context.startActivity(intent)
+                    }
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Admin: admin@oamk.fi",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline

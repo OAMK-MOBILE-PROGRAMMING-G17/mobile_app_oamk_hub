@@ -13,13 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.oamkhub.presentation.ui.components.BaseLayout
+import com.example.oamkhub.viewmodel.ThemeViewModel
 
 @Composable
-fun SettingsScreen(navController: NavController) {
-    var isDarkModeEnabled by remember { mutableStateOf(false) }
-    var areNotificationsEnabled by remember { mutableStateOf(true) }
+fun SettingsScreen(navController: NavController, themeViewModel: ThemeViewModel = viewModel()) {
+    val isDarkModeEnabled by themeViewModel.isDarkModeEnabled.collectAsState()
+    var areNotificationsEnabled by remember { mutableStateOf(false) } // Add this line
 
     BaseLayout(
         navController = navController,
@@ -39,11 +41,10 @@ fun SettingsScreen(navController: NavController) {
                 trailingContent = {
                     Switch(
                         checked = isDarkModeEnabled,
-                        onCheckedChange = { isDarkModeEnabled = it }
+                        onCheckedChange = { themeViewModel.toggleDarkMode(it) }
                     )
                 }
             )
-
             // Notifications Toggle
             SettingsOptionItem(
                 icon = Icons.Default.Notifications,
