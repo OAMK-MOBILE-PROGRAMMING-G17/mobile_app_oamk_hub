@@ -283,7 +283,7 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                     .padding(vertical = 8.dp)
                     .clickable {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = "mailto:support@example.com".toUri()
+                            data = "mailto:support@oamk.fi".toUri()
                         }
                         context.startActivity(intent)
                     }
@@ -291,7 +291,7 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                 Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Support: support@example.com",
+                    text = "Support: support@oamk.fi",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline
@@ -305,7 +305,7 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                     .padding(vertical = 8.dp)
                     .clickable {
                         val intent = Intent(Intent.ACTION_SENDTO).apply {
-                            data = "mailto:admin@example.com".toUri()
+                            data = "mailto:admin@oamk.fi".toUri()
                         }
                         context.startActivity(intent)
                     }
@@ -313,7 +313,7 @@ fun ContactScreen(navController: androidx.navigation.NavController) {
                 Icon(Icons.Default.Email, contentDescription = "Email Icon", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Admin: admin@example.com",
+                    text = "Admin: admin@oamk.fi",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline
