@@ -48,7 +48,9 @@ fun AppNavGraph(navController: NavHostController) {
             }
         }
         composable("profile") {
-            ProfileScreen(navController = navController)
+            val userName = "John Doe" // Replace with actual user data
+            val userEmail = "johndoe@example.com" // Replace with actual user data
+            ProfileScreen(navController = navController, userName = userName, userEmail = userEmail)
         }
         composable("settings") {
             SettingsScreen(navController = navController)

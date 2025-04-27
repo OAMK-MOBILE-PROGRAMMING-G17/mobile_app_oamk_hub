@@ -24,7 +24,7 @@ import com.example.oamkhub.R
 import com.example.oamkhub.presentation.ui.components.BaseLayout
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController, userName: String = "", userEmail: String = "") {
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
     // Image picker launcher
