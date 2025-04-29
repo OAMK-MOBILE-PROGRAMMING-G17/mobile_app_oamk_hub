@@ -14,6 +14,7 @@ This document covers the app features, technologies used, and instructions for r
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Installation Process](#installation-process)
+- [Environment Variable Setup](#environment-variables-setup-only-if-backend-is-locally-hosted)
 - [Running the Application](#running-the-application)
 - [User Interface Plan](#user-interface-plan)
 - [Additional Resources](#additional-resources)
@@ -101,17 +102,22 @@ Our team of three dedicated developers has worked tirelessly to bring this proje
 10. Run the app on an emulator or physical device:
     - Select the desired device in Android Studio and click on the "Run" button.
 
-## 🔐 Environment Variables Setup
+## Environment Variables Setup (only if backend is locally hosted)
 
 To run this project locally, you need to create a `.env` file in the **root directory** of the project.
 
+---
+
 ### 📄 .env file content:
 
+```bash
 PORT=3003 
 JWT_SECRET=<Your selected secret key>
 MONGO_URI=<Your MongoDB URL>
 EMAIL_USER=<Your Email address>
 EMAIL_PASS=<email Password>
+```
+
 
 
 ---
