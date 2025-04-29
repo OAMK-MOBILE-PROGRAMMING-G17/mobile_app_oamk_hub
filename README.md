@@ -15,8 +15,8 @@ This document covers the app features, technologies used, and instructions for r
 - [Technologies Used](#technologies-used)
 - [Installation Process](#installation-process)
 - [Running the Application](#running-the-application)
-- [Future Improvements](#future-improvements)
-- [Contributing](#contributing)
+- [User Interface Plan](#user-interface-plan)
+- [Additional Resources](#additional-resources)
 - [License](#license)
 
 ---
@@ -32,9 +32,9 @@ It offers a centralized space for news, events, lost & found services, a marketp
 
 Our team of three dedicated developers has worked tirelessly to bring this project:
 
--**Anil Shah**: Full Stack Developer
--**Bibek Tandon**: Full Stack Developer
--**Pabitra Kunwar**: Frontend Developer
+- **Anil Shah**: Full Stack Developer
+- **Bibek Tandon**: Full Stack Developer
+- **Pabitra Kunwar**: Frontend Developer
 
 ---
 
@@ -84,7 +84,7 @@ Our team of three dedicated developers has worked tirelessly to bring this proje
    ```bash
    ./gradlew build
    ```
-4. Set up the backend server (if not already running):
+4. Set up the backend server (if not using the Live Backend URL):
 5. Navigate to the backend directory:
    ```bash
    cd backend
@@ -97,9 +97,22 @@ Our team of three dedicated developers has worked tirelessly to bring this proje
 8. ```bash
    npm start devStart
    ```
-9. Ensure the backend server is running on `http://localhost:5000` or update the API base URL in the app's configuration.
+9. Ensure the backend server is running on `http://localhost:3003` or update the API base URL in the app's configuration.
 10. Run the app on an emulator or physical device:
     - Select the desired device in Android Studio and click on the "Run" button.
+
+## 🔐 Environment Variables Setup
+
+To run this project locally, you need to create a `.env` file in the **root directory** of the project.
+
+### 📄 .env file content:
+
+PORT=3003 
+JWT_SECRET=<Your selected secret key>
+MONGO_URI=<Your MongoDB URL>
+EMAIL_USER=<Your Email address>
+EMAIL_PASS=<email Password>
+
 
 ---
 ## Running the Application
@@ -126,12 +139,16 @@ The OAMK Hub mobile application is structured into key sections:
 - **Profile Management**: Manage user information, preferences, and activity history.
 - **Emergency Contacts**: Quick access to important OAMK emergency and support contacts.
 
-For more details, view the following resources:
-- **Figma UI Design**: [Figma UI Design](#) *https://www.figma.com/design/Qw2xd2QoBAXQ7nHgqU0rCk/OAMK-Hub?node-id=52-79&p=f&t=ER8hZdAVFN4NXmS8-0*
-- **Backend URL**: [Backend URL](#) *https://oamkhub-brdphqdjbbbyafag.northeurope-01.azurewebsites.net*
-- **ERD Diagram**: [ERD Diagram](#) *https://unioulu-my.sharepoint.com/:w:/g/personal/t3kupa01_students_oamk_fi/ERyubn3tbl1Ii-D4zHq0OFABikLRK4t3JPQNjIt88Bl54A?e=UbUSrF*
-- **
+---
+## Additional Resources
 
+For more details, view the following resources:
+- 📦 **[Backend Repository](https://github.com/OAMK-MOBILE-PROGRAMMING-G17/server_oamk_hub.git)**
+- 📘 **[Backend API Documentation](https://github.com/OAMK-MOBILE-PROGRAMMING-G17/server_oamk_hub/blob/main/README.md)**
+- 🎨 **[Figma UI Design](https://www.figma.com/design/Qw2xd2QoBAXQ7nHgqU0rCk/OAMK-Hub?node-id=52-79&p=f&t=ER8hZdAVFN4NXmS8-0)**
+- 🌐 **[Live Backend URL](https://oamkhub-brdphqdjbbbyafag.northeurope-01.azurewebsites.net/)**
+- 📘 **[ERD Diagram](https://unioulu-my.sharepoint.com/:w:/g/personal/t3kupa01_students_oamk_fi/ERyubn3tbl1Ii-D4zHq0OFABikLRK4t3JPQNjIt88Bl54A?e=UbUSrF)**
+- 📱**[Live App Demo (Appetize)](https://appetize.io/app/b_svrcmppoecxzycjovep6wfhbee)
 ---
 
 ## License
