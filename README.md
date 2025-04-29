@@ -84,7 +84,7 @@ Our team of three dedicated developers has worked tirelessly to bring this proje
    ```bash
    ./gradlew build
    ```
-4. Set up the backend server (if not using the Live Backend URL):
+4. Set up the backend server ([if not using the Live Backend URL](#additional-resources)):
 5. Navigate to the backend directory:
    ```bash
    cd backend
@@ -148,7 +148,7 @@ For more details, view the following resources:
 - 🎨 **[Figma UI Design](https://www.figma.com/design/Qw2xd2QoBAXQ7nHgqU0rCk/OAMK-Hub?node-id=52-79&p=f&t=ER8hZdAVFN4NXmS8-0)**
 - 🌐 **[Live Backend URL](https://oamkhub-brdphqdjbbbyafag.northeurope-01.azurewebsites.net/)**
 - 📘 **[ERD Diagram](https://unioulu-my.sharepoint.com/:w:/g/personal/t3kupa01_students_oamk_fi/ERyubn3tbl1Ii-D4zHq0OFABikLRK4t3JPQNjIt88Bl54A?e=UbUSrF)**
-- 📱**[Live App Demo (Appetize)](https://appetize.io/app/b_svrcmppoecxzycjovep6wfhbee)
+- 📱 **[Live App Demo (Appetize)](https://appetize.io/app/b_svrcmppoecxzycjovep6wfhbee)**
 ---
 
 ## License
